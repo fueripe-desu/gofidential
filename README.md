@@ -35,7 +35,7 @@ GoFidential is not yet published on any package registry. To get started, simply
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/envflex.git
+git clone https://github.com/yourusername/gofidential.git
 ```
 
 2. Import the package into your Go project.
@@ -64,8 +64,8 @@ If you find GoFidential helpful, please consider supporting the project in the f
 
 - ⭐ **Star the repo**: Give the project a star to show your support! [Star the repo here](https://github.com/fueripe-desu/gofidential) 🌟  
 - 🍴 **Fork the repo**: Fork the repository to contribute, improve, and make your own customizations.  
-- 🐛 **Report issues**: If you find a bug, please report it by opening an [issue](https://github.com/yourusername/envflex/issues).  
-- 💬 **Spread the word**: Tell others about EnvFlex! Share it on social media, blogs, or anywhere developers gather.  
+- 🐛 **Report issues**: If you find a bug, please report it by opening an [issue](https://github.com/yourusername/gofidential/issues).  
+- 💬 **Spread the word**: Tell others about GoFidential! Share it on social media, blogs, or anywhere developers gather.  
 - 🤝 **Contribute**: Help improve the project by contributing bug fixes, features, or improvements. Please check out the [Contributing Guide](./CONTRIBUTING.md).
 - ☕ **Support me on Ko-Fi:** If you love the project and want to show your support, consider buying me a coffee! Every coffee fuels my creativity to keep improving the project and building awesome things. Support me on [Ko-Fi](https://ko-fi.com/fueripedesu) here 💙  
 
