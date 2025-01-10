@@ -3,7 +3,7 @@ name: Feature request
 about: Propose a new feature or enhancement that could improve the project. Include
   the problem you're trying to solve and any potential solutions.
 title: "[Feature]: Brief description of the proposed feature"
-labels: enhancement
+labels: feature
 assignees: fueripe-desu
 
 ---

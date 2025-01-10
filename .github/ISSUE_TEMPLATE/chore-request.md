@@ -3,7 +3,7 @@ name: Chore request
 about: Propose routine maintenance tasks like dependency updates, CI improvements,
   or cleaning up unused code.
 title: "[Chore]: Brief description of the maintenance task"
-labels: ''
+labels: chore
 assignees: fueripe-desu
 
 ---

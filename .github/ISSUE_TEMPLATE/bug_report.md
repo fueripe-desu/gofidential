@@ -3,7 +3,7 @@ name: Bug report
 about: Report a problem you've encountered with the project, including steps to reproduce,
   expected behavior, and actual behavior.
 title: "[Bug]: Brief description of the issue"
-labels: bug
+labels: bug, support
 assignees: fueripe-desu
 
 ---

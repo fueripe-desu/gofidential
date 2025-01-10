@@ -3,7 +3,7 @@ name: Support request
 about: Ask for help with using the project or configuring specific features. This
   is not for bug reports or feature requests.
 title: "[Support]: Brief description of your question or issue"
-labels: ''
+labels: support
 assignees: fueripe-desu
 
 ---
