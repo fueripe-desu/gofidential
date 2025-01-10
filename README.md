@@ -7,7 +7,8 @@ GoFidential is designed to simplify how your applications handle environment var
 
 - [Getting Started](#getting-started)  
 - [Features](#features)  
-- [Contributing](#contributing)  
+- [Contributing](#contributing)
+- [Maintaining](#how-to-maintain)  
 - [Code of Conduct](#code-of-conduct)  
 - [Issues](#issues)  
 - [Show Your Support](#show-your-support)
@@ -45,6 +46,9 @@ We welcome contributions to GoFidential! Whether you're fixing a bug, adding a f
 
 ## How to Contribute
 Please refer to our [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed instructions on how to contribute to the project.
+
+## How to Maintain
+Please refer to our [MAINTAIN.md](./MAINTAIN.md) for detailed instructions on how to act as a core project mantainer.
 
 ## Issues
 If you encounter any bugs or have suggestions for improvement, feel free to [open an issue](https://github.com/fueripe-desu/gofidential/issues) in the repository.
