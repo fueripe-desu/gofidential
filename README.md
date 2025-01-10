@@ -21,6 +21,7 @@ This section is currently being worked on...
 - ⚙️ **Environment-Aware:** Automatically adapts to different environments (development, staging, production).
 - 🛠 **Highly Customizable:** Offers extensive configuration options to fit your workflow.
 - 🧩 **Seamless Integration:** Works effortlessly with your Go projects, solving pain points often encountered with other libraries.
+- ☁️ **Cloud-Ready:** Fetch secrets dynamically from cloud providers when needed.
 - 🔄 **Lightweight and Reliable**: Designed for performance and simplicity without unnecessary complexity
 - ⚡ **Fail Fast:** Provides immediate error feedback during runtime initialization. If a required environment variable is missing, the application will fail early, ensuring you catch issues before they become runtime errors.
 - 🔍 **Custom Error Codes:** Easily distinguish errors with custom error codes, making debugging simpler and more organized.
