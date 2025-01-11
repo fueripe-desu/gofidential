@@ -77,7 +77,7 @@ func Test_New(t *testing.T) {
 					assert.FailNow(err.Error())
 				}
 
-				expectedPtr := reflect.ValueOf(tc.data)
+				expectedPtr := reflect.ValueOf(tc.data).Elem()
 
 				assert.True(r.ptrval.Equal(expectedPtr))
 				assert.Nil(err)
