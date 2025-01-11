@@ -7,7 +7,7 @@ type Reflector struct {
 }
 
 func (r *Reflector) IsEmpty() bool {
-	return false
+	return r.ptrval.NumField() == 0
 }
 
 func New(data any) (*Reflector, error) {
