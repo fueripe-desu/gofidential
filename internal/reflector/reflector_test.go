@@ -9,6 +9,44 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func Test_IsEmpty(t *testing.T) {
+	testcases := []struct {
+		name     string
+		data     any
+		expected bool
+	}{
+		{
+			name:     "empty struct",
+			data:     &(struct{}{}),
+			expected: true,
+		},
+		{
+			name:     "non empty struct",
+			data:     &(struct{ Field1 string }{}),
+			expected: false,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Arrange
+			assert := assert.New(t)
+
+			// Act
+			r, err := New(tc.data)
+
+			if err != nil {
+				assert.FailNow(err.Error())
+			}
+
+			isEmpty := r.IsEmpty()
+
+			// Assert
+			assert.Equal(isEmpty, tc.expected)
+		})
+	}
+}
+
 func Test_New(t *testing.T) {
 	testcases := []struct {
 		name        string
