@@ -6,6 +6,10 @@ type Reflector struct {
 	ptrval reflect.Value
 }
 
+func (r *Reflector) IsEmpty() bool {
+	return false
+}
+
 func New(data any) (*Reflector, error) {
 	ptrval := reflect.ValueOf(data)
 
@@ -19,13 +23,16 @@ func New(data any) (*Reflector, error) {
 		return nil, newDataIsNotPtrError()
 	}
 
+	// Dereference pointer.
+	ptrval = ptrval.Elem()
+
 	// Check if the data pointer value is not nil.
-	if !ptrval.Elem().IsValid() {
+	if !ptrval.IsValid() {
 		return nil, newDataIsNilPtrError()
 	}
 
 	// Check if the data pointer value is not a struct.
-	if ptrval.Elem().Kind() != reflect.Struct {
+	if ptrval.Kind() != reflect.Struct {
 		return nil, newDataIsNotStructError()
 	}
 
