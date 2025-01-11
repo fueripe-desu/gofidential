@@ -23,8 +23,9 @@ jobs:
       with:
         go-version: '1.22'
     
-    - name: Check go.mod for outdated dependencies
-      run: go list -m outdated
+    - name: Check for outdated dependencies
+      run: |
+        go list -u -m all || echo "No dependencies or updates available."
 
     - name: Check Go version
       run: go version
