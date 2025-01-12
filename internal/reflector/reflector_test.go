@@ -47,6 +47,61 @@ func Test_IsEmpty(t *testing.T) {
 	}
 }
 
+func Test_FieldCount(t *testing.T) {
+	testcases := []struct {
+		name          string
+		data          any
+		expectedCount int
+	}{
+		{
+			name:          "zero fields",
+			data:          &(struct{}{}),
+			expectedCount: 0,
+		},
+		{
+			name: "one field",
+			data: &(struct {
+				Field1 string
+			}{}),
+			expectedCount: 1,
+		},
+		{
+			name: "two fields",
+			data: &(struct {
+				Field1 string
+				Field2 string
+			}{}),
+			expectedCount: 2,
+		},
+		{
+			name: "three fields",
+			data: &(struct {
+				Field1 string
+				Field2 string
+				Field3 string
+			}{}),
+			expectedCount: 3,
+		},
+	}
+
+	for _, tc := range testcases {
+		// Arrange
+		assert := assert.New(t)
+
+		// Act
+		r, err := New(tc.data)
+
+		if err != nil {
+			assert.FailNow(err.Error())
+		}
+
+		fieldCount := r.FieldCount()
+
+		// Assert
+		assert.Equal(fieldCount, tc.expectedCount)
+	}
+}
+
 func Test_New(t *testing.T) {
 	testcases := []struct {
 		name        string
