@@ -10,6 +10,10 @@ func (r *Reflector) IsEmpty() bool {
 	return r.ptrval.NumField() == 0
 }
 
+func (r *Reflector) FieldCount() int {
+	return r.ptrval.NumField()
+}
+
 func New(data any) (*Reflector, error) {
 	ptrval := reflect.ValueOf(data)
 
