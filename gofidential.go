@@ -1,5 +1,6 @@
 package gofidential
 
-func Sum(x int, y int) int {
-	return x + y
+func Load(data any) error {
+
+	return nil
 }
