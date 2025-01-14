@@ -23,7 +23,7 @@ func Test_isValidDir(t *testing.T) {
 		require.NoError(err, "Failed to create temporary dir")
 
 		t.Cleanup(func() {
-			err = os.RemoveAll(tempDir)
+			err := os.RemoveAll(tempDir)
 			assert.NoError(err, "Failed to remove temporary dir")
 		})
 
@@ -188,7 +188,7 @@ func Test_openFile(t *testing.T) {
 		require.NoError(err, "Failed to create file in temporary dir.")
 
 		t.Cleanup(func() {
-			err = os.RemoveAll(tempDir)
+			err := os.RemoveAll(tempDir)
 			assert.NoError(err, "Failed to remove temporary dir")
 		})
 
