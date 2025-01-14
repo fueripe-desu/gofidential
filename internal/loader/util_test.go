@@ -30,11 +30,12 @@ func Test_isValidDir(t *testing.T) {
 		err = isValidDir(tempDir)
 		require.NoError(err, "An unexpected error ocurred")
 
-		require.Nil(err)
+		assert.Nil(err)
 	})
 
 	t.Run("should return an error if the specified folder was not found", func(t *testing.T) {
 		require := require.New(t)
+		assert := assert.New(t)
 
 		expectedErr := newEnvDirNotExistError()
 
@@ -44,7 +45,7 @@ func Test_isValidDir(t *testing.T) {
 		castErr, ok := err.(*errors.GofidentialError)
 		require.True(ok, "Error is not of type GofidentialError.")
 
-		require.True(
+		assert.True(
 			castErr.Equal(expectedErr),
 			"The actual error does not match the expected one. Actual: %v, Expected: %v",
 			castErr,
@@ -83,7 +84,7 @@ func Test_isValidDir(t *testing.T) {
 		castErr, ok := err.(*errors.GofidentialError)
 		require.True(ok, "Error is not of type GofidentialError.")
 
-		require.True(
+		assert.True(
 			castErr.Equal(expectedErr),
 			"The actual error does not match the expected one. Actual: %v, Expected: %v",
 			castErr,
@@ -119,19 +120,21 @@ func Test_fileExists(t *testing.T) {
 		exists, err := fileExists(fp)
 		require.NoError(err, "An unexpected error ocurred")
 
-		require.True(exists)
-		require.Nil(err)
+		assert.True(exists)
+		assert.Nil(err)
 	})
 
 	t.Run("should return false if the file does not exist", func(t *testing.T) {
 		require := require.New(t)
+		assert := assert.New(t)
+
 		tempFilename := "unknown.txt"
 
 		exists, err := fileExists(tempFilename)
 		require.NoError(err, "An unexpected error ocurred")
 
-		require.False(exists)
-		require.Nil(err)
+		assert.False(exists)
+		assert.Nil(err)
 	})
 
 	t.Run("should return an error if the specified path does not point to a file", func(t *testing.T) {
@@ -156,8 +159,8 @@ func Test_fileExists(t *testing.T) {
 		castErr, ok := err.(*errors.GofidentialError)
 		require.True(ok, "Error is not of type GofidentialError.")
 
-		require.False(exists)
-		require.True(
+		assert.False(exists)
+		assert.True(
 			castErr.Equal(expectedErr),
 			"The actual error does not match the expected one. Actual: %v, Expected: %v",
 			castErr,
@@ -230,8 +233,8 @@ func Test_openFile(t *testing.T) {
 
 		assert.Empty(buffer.String())
 		assert.Equal(buffer.Len(), 0)
-		require.Error(err, "An error was expected. But got none.")
-		require.True(
+		assert.Error(err, "An error was expected. But got none.")
+		assert.True(
 			castErr.Equal(expectedErr),
 			"The actual error does not match the expected one. Actual: %v, Expected: %v",
 			castErr,
