@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func isValidFolder(path string) error {
+func isValidDir(path string) error {
 	// Get file or directory info
 	info, err := os.Stat(path)
 

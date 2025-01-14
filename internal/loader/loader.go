@@ -55,7 +55,7 @@ func Load(name string, overridePath string, ignoreFilename bool) (bytes.Buffer, 
 	}
 
 	// If a path was specified, then check if it points to a valid directory.
-	if err := isValidFolder(overridePath); err != nil {
+	if err := isValidDir(overridePath); err != nil {
 		return bytes.Buffer{}, err
 	}
 
