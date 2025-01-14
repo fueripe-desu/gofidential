@@ -538,7 +538,7 @@ func Test_Load(t *testing.T) {
 		tempName := "test"
 		filename := "dev.env"
 		fileContents := "Hello world!"
-		expectedErr := newPathIsNotFolderError()
+		expectedErr := newPathIsNotDirError()
 
 		// Act
 		tempDir, err := os.MkdirTemp("", tempName)

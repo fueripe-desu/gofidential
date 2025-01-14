@@ -14,10 +14,10 @@ func isValidDir(path string) error {
 	if err != nil {
 		// If the path doesn't exist or is invalid
 		if os.IsNotExist(err) {
-			return newEnvFolderNotExistError()
+			return newEnvDirNotExistError()
 		}
 		// Other errors (e.g., permission issues)
-		return newFailedToReadFolderError()
+		return newFailedToReadDirError()
 	}
 
 	// Check if the path is a directory
@@ -25,7 +25,7 @@ func isValidDir(path string) error {
 		return nil
 	}
 
-	return newPathIsNotFolderError()
+	return newPathIsNotDirError()
 }
 
 func fileExists(path string) (bool, error) {

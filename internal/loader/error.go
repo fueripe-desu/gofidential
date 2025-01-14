@@ -21,26 +21,26 @@ func newMissingEnvNameError() *errors.GofidentialError {
 	}
 }
 
-func newEnvFolderNotExistError() *errors.GofidentialError {
+func newEnvDirNotExistError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.EnvFolderNotExistCode,
-		Message:    "Folder path does not exist.",
+		Code:       errors.EnvDirNotExistCode,
+		Message:    "Dir path does not exist.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
-		Suggestion: "Check if you are correctly specifying an existing folder path to the 'path' parameter of the 'Environment' provided to the Load() function.",
+		Suggestion: "Check if you are correctly specifying an existing dir path to the 'path' parameter of the 'Environment' provided to the Load() function.",
 		Details:    map[string]string{},
 	}
 }
 
-func newFailedToReadFolderError() *errors.GofidentialError {
+func newFailedToReadDirError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.FailedToReadFolderCode,
-		Message:    "Failed to read folder.",
+		Code:       errors.FailedToReadDirCode,
+		Message:    "Failed to read dir.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
-		Suggestion: "Check if the application has permission to read the specified folder path.",
+		Suggestion: "Check if the application has permission to read the specified dir path.",
 		Details:    map[string]string{},
 	}
 }
@@ -57,14 +57,14 @@ func newFailedToReadFileError() *errors.GofidentialError {
 	}
 }
 
-func newPathIsNotFolderError() *errors.GofidentialError {
+func newPathIsNotDirError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.PathIsNotFolderCode,
-		Message:    "Path does not point to a folder.",
+		Code:       errors.PathIsNotDirCode,
+		Message:    "Path does not point to a dir.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
-		Suggestion: "Check if the 'path' of the 'Environment' provided to the Load() function points to a folder not a file.",
+		Suggestion: "Check if the 'path' of the 'Environment' provided to the Load() function points to a dir not a file.",
 		Details:    map[string]string{},
 	}
 }
@@ -85,10 +85,10 @@ func newRootNotFoundError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
 		Code:       errors.RootNotFoundCode,
-		Message:    "Could not find the root folder.",
+		Message:    "Could not find the root dir.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
-		Suggestion: "Assert you are executing the project in the root folder or its subfolders.",
+		Suggestion: "Assert you are executing the project in the root dir or its sub directories.",
 		Details:    map[string]string{},
 	}
 }
@@ -100,7 +100,7 @@ func newEnvNotFoundError() *errors.GofidentialError {
 		Message:    "Could not find target .env file.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
-		Suggestion: "Assert you are executing the project in the root folder or its subfolders.",
+		Suggestion: "Assert you are executing the project in the root dir or its sub directories.",
 		Details:    map[string]string{},
 	}
 }

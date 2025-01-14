@@ -36,7 +36,7 @@ func Test_isValidDir(t *testing.T) {
 	t.Run("should return an error if the specified folder was not found", func(t *testing.T) {
 		require := require.New(t)
 
-		expectedErr := newEnvFolderNotExistError()
+		expectedErr := newEnvDirNotExistError()
 
 		err := isValidDir("unknown")
 		require.Error(err, "An error was expected. But got none.")
@@ -59,7 +59,7 @@ func Test_isValidDir(t *testing.T) {
 		tempDirName := "test"
 		tempFilename := "example.txt"
 
-		expectedErr := newPathIsNotFolderError()
+		expectedErr := newPathIsNotDirError()
 
 		tempDir, err := os.MkdirTemp("", tempDirName)
 		require.NoError(err, "Failed to create temporary dir")
