@@ -4,592 +4,292 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-	"time"
 
 	"github.com/fueripe-desu/gofidential/errors"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_Load(t *testing.T) {
-	t.Run("empty name", func(t *testing.T) {
-		// Arrange
+	t.Run("should return an error if name is empty", func(t *testing.T) {
+		require := require.New(t)
 		assert := assert.New(t)
+
 		name := ""
 		defaultPath := ""
 		ignoreFilename := false
+
 		expectedErr := newMissingEnvNameError()
 
-		// Act
 		buffer, err := Load(name, defaultPath, ignoreFilename)
-
-		// Assert
-		if err == nil {
-			assert.FailNow("Error should not be nil.")
-		}
+		require.Error(err, "An error was expected. But got none.")
 
 		castErr, ok := err.(*errors.GofidentialError)
-
-		if !ok {
-			assert.FailNow("Error is not of type GofidentialError.")
-		}
+		require.True(ok, "Error is not of type GofidentialError.")
 
 		assert.Empty(buffer.String())
 		assert.Equal(buffer.Len(), 0)
-		assert.Equal(castErr.Issuer, expectedErr.Issuer)
-		assert.Equal(castErr.Code, expectedErr.Code)
-		assert.Equal(castErr.Message, expectedErr.Message)
-		assert.WithinDuration(castErr.Timestamp, expectedErr.Timestamp, 5*time.Second)
-		assert.Equal(castErr.Suggestion, expectedErr.Suggestion)
-		assert.NotEmpty(castErr.StackTrace, expectedErr.StackTrace)
-		assert.Equal(castErr.Details, expectedErr.Details)
+		assert.True(
+			castErr.Equal(expectedErr),
+			"The actual error does not match the expected one. Actual: %v, Expected: %v",
+			castErr,
+			expectedErr,
+		)
 	})
 
-	t.Run("no path override file exists in cwd", func(t *testing.T) {
-		// Arrange
+	defaultPathTestcases := []struct {
+		name string
+
+		envName        string
+		ignoreFilename bool
+
+		tempDirName      string
+		tempFilename     string
+		tempFileContents string
+
+		expectedErr *errors.GofidentialError
+	}{
+		{
+			name:             "should return a byte buffer if file exists in default path",
+			envName:          "dev",
+			ignoreFilename:   false,
+			tempDirName:      "test",
+			tempFilename:     "dev.env",
+			tempFileContents: "Hello world!",
+		},
+		{
+			name:             "should return an error if filename does not match the environment",
+			envName:          "dev",
+			ignoreFilename:   false,
+			tempDirName:      "test",
+			tempFilename:     "prod.env",
+			tempFileContents: "Hello world!",
+			expectedErr:      newEnvNotFoundError(),
+		},
+		{
+			name:             "should return a byte buffer if filename is ignored and a nameless file exists",
+			envName:          "dev",
+			ignoreFilename:   true,
+			tempDirName:      "test",
+			tempFilename:     ".env",
+			tempFileContents: "Hello world!",
+		},
+		{
+			name:             "should return an error if filename is ignored and a nameless file does not exist",
+			envName:          "dev",
+			ignoreFilename:   true,
+			tempDirName:      "test",
+			tempFilename:     "dev.env",
+			tempFileContents: "Hello world!",
+			expectedErr:      newEnvNotFoundError(),
+		},
+	}
+
+	for _, tc := range defaultPathTestcases {
+		t.Run(tc.name, func(t *testing.T) {
+			require := require.New(t)
+			assert := assert.New(t)
+
+			originalDir, err := os.Getwd()
+			require.NoError(err, "Failed to get the current working directory.")
+
+			tempDir, err := os.MkdirTemp("", tc.tempDirName)
+			require.NoError(err, "Failed to create temporary dir")
+
+			err = os.Chdir(tempDir)
+			require.NoError(err, "Failed to change working directory to the temporary directory.")
+
+			tempFile, err := os.OpenFile(tc.tempFilename, os.O_CREATE|os.O_WRONLY, 0644)
+			require.NoError(err, "Failed to create file in temporary dir.")
+
+			_, err = tempFile.WriteString(tc.tempFileContents)
+			require.NoError(err, "Failed writing string to file.")
+
+			t.Cleanup(func() {
+				err := tempFile.Close()
+				assert.NoError(err, "Failed to close file in temporary dir.")
+
+				err = os.Chdir(originalDir)
+				assert.NoError(err, "Failed to return to the original working directory.")
+
+				err = os.RemoveAll(tempDir)
+				assert.NoError(err, "Failed to remove temporary dir")
+			})
+
+			buffer, err := Load(tc.envName, "", tc.ignoreFilename)
+
+			if tc.expectedErr == nil {
+				require.NoError(err, "An unexpected error ocurred")
+
+				assert.Equal(buffer.String(), tc.tempFileContents)
+				assert.Equal(buffer.Len(), len([]byte(tc.tempFileContents)))
+				assert.Nil(err)
+			} else {
+				require.Error(err, "An error was expected. But got none.")
+
+				castErr, ok := err.(*errors.GofidentialError)
+				require.True(ok, "Error is not of type GofidentialError.")
+
+				assert.Empty(buffer.String())
+				assert.Equal(buffer.Len(), 0)
+				assert.Error(err, "An error was expected. But got none.")
+				assert.True(
+					castErr.Equal(tc.expectedErr),
+					"The actual error does not match the expected one. Actual: %v, Expected: %v",
+					castErr,
+					tc.expectedErr,
+				)
+			}
+		})
+	}
+
+	pathOverrideTestcases := []struct {
+		name string
+
+		envName        string
+		ignoreFilename bool
+
+		tempDirName      string
+		tempFilename     string
+		tempFileContents string
+
+		expectedErr *errors.GofidentialError
+	}{
+		{
+			name:             "should return a byte buffer if file exists in overriden path",
+			envName:          "dev",
+			ignoreFilename:   false,
+			tempDirName:      "test",
+			tempFilename:     "dev.env",
+			tempFileContents: "Hello world!",
+		},
+		{
+			name:             "should return an if filename does not match the environment in overriden path",
+			envName:          "dev",
+			ignoreFilename:   false,
+			tempDirName:      "test",
+			tempFilename:     "prod.env",
+			tempFileContents: "Hello world!",
+			expectedErr:      newEnvNotFoundError(),
+		},
+		{
+			name:             "should return a byte buffer if filename is ignored and a nameless file exist in overriden path",
+			envName:          "dev",
+			ignoreFilename:   true,
+			tempDirName:      "test",
+			tempFilename:     ".env",
+			tempFileContents: "Hello world!",
+		},
+		{
+			name:             "should return an error if filename is ignored and a nameless does not file exist in overriden path",
+			envName:          "dev",
+			ignoreFilename:   true,
+			tempDirName:      "test",
+			tempFilename:     "dev.env",
+			tempFileContents: "Hello world!",
+			expectedErr:      newEnvNotFoundError(),
+		},
+	}
+
+	for _, tc := range pathOverrideTestcases {
+		t.Run(tc.name, func(t *testing.T) {
+			require := require.New(t)
+			assert := assert.New(t)
+
+			tempDir, err := os.MkdirTemp("", tc.tempDirName)
+			require.NoError(err, "Failed to create temporary dir")
+
+			t.Cleanup(func() {
+				err := os.RemoveAll(tempDir)
+				assert.NoError(err, "Failed to remove temporary dir")
+			})
+
+			fp := filepath.Join(tempDir, tc.tempFilename)
+
+			tempFile, err := os.OpenFile(fp, os.O_CREATE|os.O_WRONLY, 0644)
+			require.NoError(err, "Failed to create file in temporary dir.")
+
+			_, err = tempFile.WriteString(tc.tempFileContents)
+			require.NoError(err, "Failed writing string to file.")
+
+			err = tempFile.Close()
+			assert.NoError(err, "Failed to close file in temporary dir.")
+
+			pathOverride := tempDir
+
+			buffer, err := Load(tc.envName, pathOverride, tc.ignoreFilename)
+
+			if tc.expectedErr == nil {
+				require.NoError(err, "An unexpected error ocurred")
+				assert.Equal(buffer.String(), tc.tempFileContents)
+				assert.Equal(buffer.Len(), len([]byte(tc.tempFileContents)))
+				assert.Nil(err)
+			} else {
+				require.Error(err, "An error was expected. But got none.")
+
+				castErr, ok := err.(*errors.GofidentialError)
+				require.True(ok, "Error is not of type GofidentialError.")
+
+				assert.Empty(buffer.String())
+				assert.Equal(buffer.Len(), 0)
+				assert.Error(err, "An error was expected. But got none.")
+				assert.True(
+					castErr.Equal(tc.expectedErr),
+					"The actual error does not match the expected one. Actual: %v, Expected: %v",
+					castErr,
+					tc.expectedErr,
+				)
+			}
+		})
+	}
+
+	t.Run("should return an error if overriden path is a file instead of a dir", func(t *testing.T) {
+		require := require.New(t)
 		assert := assert.New(t)
+
 		name := "dev"
 		ignoreFilename := false
-		tempName := "test"
-		filename := "dev.env"
-		fileContents := "Hello world!"
 
-		// Act
-		originalDir, err := os.Getwd()
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
+		tempDirName := "test"
+		tempFilename := "dev.env"
+		tempFileContents := "Hello world!"
 
-		tempDir, err := os.MkdirTemp("", tempName)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		defer func() {
-			if err := os.Chdir(originalDir); err != nil {
-				assert.FailNow(err.Error())
-			}
-
-			if err = os.RemoveAll(tempDir); err != nil {
-				assert.FailNow(err.Error())
-			}
-		}()
-
-		if err = os.Chdir(tempDir); err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempFile, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY, 0644)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		_, err = tempFile.WriteString(fileContents)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempFile.Close()
-
-		buffer, err := Load(name, "", ignoreFilename)
-
-		// Assert
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		assert.Equal(buffer.String(), fileContents)
-		assert.Equal(buffer.Len(), len([]byte(fileContents)))
-		assert.Nil(err)
-	})
-
-	t.Run("no path override file exists in cwd but with a different name", func(t *testing.T) {
-		// Arrange
-		assert := assert.New(t)
-		name := "dev"
-		ignoreFilename := false
-		tempName := "test"
-		filename := "prod.env"
-		expectedErr := newEnvNotFoundError()
-
-		// Act
-		originalDir, err := os.Getwd()
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempDir, err := os.MkdirTemp("", tempName)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		defer func() {
-			if err := os.Chdir(originalDir); err != nil {
-				assert.FailNow(err.Error())
-			}
-
-			if err = os.RemoveAll(tempDir); err != nil {
-				assert.FailNow(err.Error())
-			}
-		}()
-
-		if err = os.Chdir(tempDir); err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempFile, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY, 0644)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempFile.Close()
-
-		buffer, err := Load(name, "", ignoreFilename)
-
-		// Assert
-		if err == nil {
-			assert.FailNow("Error should not be nil.")
-		}
-
-		castErr, ok := err.(*errors.GofidentialError)
-
-		if !ok {
-			assert.FailNow("Error is not of type GofidentialError.")
-		}
-
-		assert.Empty(buffer.String())
-		assert.Equal(buffer.Len(), 0)
-		assert.Equal(castErr.Issuer, expectedErr.Issuer)
-		assert.Equal(castErr.Code, expectedErr.Code)
-		assert.Equal(castErr.Message, expectedErr.Message)
-		assert.WithinDuration(castErr.Timestamp, expectedErr.Timestamp, 5*time.Second)
-		assert.Equal(castErr.Suggestion, expectedErr.Suggestion)
-		assert.NotEmpty(castErr.StackTrace, expectedErr.StackTrace)
-		assert.Equal(castErr.Details, expectedErr.Details)
-	})
-
-	t.Run("no path override file exists in cwd but with a different name ignore filename", func(t *testing.T) {
-		// Arrange
-		assert := assert.New(t)
-		name := "dev"
-		ignoreFilename := true
-		tempName := "test"
-		filename := ".env"
-		fileContents := "Hello world!"
-
-		// Act
-		originalDir, err := os.Getwd()
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempDir, err := os.MkdirTemp("", tempName)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		defer func() {
-			if err := os.Chdir(originalDir); err != nil {
-				assert.FailNow(err.Error())
-			}
-
-			if err = os.RemoveAll(tempDir); err != nil {
-				assert.FailNow(err.Error())
-			}
-		}()
-
-		if err = os.Chdir(tempDir); err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempFile, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY, 0644)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		_, err = tempFile.WriteString(fileContents)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempFile.Close()
-
-		buffer, err := Load(name, "", ignoreFilename)
-
-		// Assert
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		assert.Equal(buffer.String(), fileContents)
-		assert.Equal(buffer.Len(), len([]byte(fileContents)))
-		assert.Nil(err)
-	})
-
-	t.Run("no path override file exists in cwd but with a different name ignore filename", func(t *testing.T) {
-		// Arrange
-		assert := assert.New(t)
-		name := "dev"
-		ignoreFilename := true
-		tempName := "test"
-		filename := "dev.env"
-		expectedErr := newEnvNotFoundError()
-
-		// Act
-		originalDir, err := os.Getwd()
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempDir, err := os.MkdirTemp("", tempName)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		defer func() {
-			if err := os.Chdir(originalDir); err != nil {
-				assert.FailNow(err.Error())
-			}
-
-			if err = os.RemoveAll(tempDir); err != nil {
-				assert.FailNow(err.Error())
-			}
-		}()
-
-		if err = os.Chdir(tempDir); err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempFile, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY, 0644)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempFile.Close()
-
-		buffer, err := Load(name, "", ignoreFilename)
-
-		// Assert
-		if err == nil {
-			assert.FailNow("Error should not be nil.")
-		}
-
-		castErr, ok := err.(*errors.GofidentialError)
-
-		if !ok {
-			assert.FailNow("Error is not of type GofidentialError.")
-		}
-
-		assert.Empty(buffer.String())
-		assert.Equal(buffer.Len(), 0)
-		assert.Equal(castErr.Issuer, expectedErr.Issuer)
-		assert.Equal(castErr.Code, expectedErr.Code)
-		assert.Equal(castErr.Message, expectedErr.Message)
-		assert.WithinDuration(castErr.Timestamp, expectedErr.Timestamp, 5*time.Second)
-		assert.Equal(castErr.Suggestion, expectedErr.Suggestion)
-		assert.NotEmpty(castErr.StackTrace, expectedErr.StackTrace)
-		assert.Equal(castErr.Details, expectedErr.Details)
-	})
-
-	t.Run("specified path file exists", func(t *testing.T) {
-		// Arrange
-		assert := assert.New(t)
-		name := "dev"
-		ignoreFilename := false
-		tempName := "test"
-		filename := "dev.env"
-		fileContents := "Hello world!"
-
-		// Act
-		tempDir, err := os.MkdirTemp("", tempName)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		pathOverride := tempDir
-
-		defer func() {
-			if err = os.RemoveAll(tempDir); err != nil {
-				assert.FailNow(err.Error())
-			}
-		}()
-
-		fp := filepath.Join(tempDir, filename)
-		tempFile, err := os.OpenFile(fp, os.O_CREATE|os.O_WRONLY, 0644)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		_, err = tempFile.WriteString(fileContents)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempFile.Close()
-
-		buffer, err := Load(name, pathOverride, ignoreFilename)
-
-		// Assert
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		assert.Equal(buffer.String(), fileContents)
-		assert.Equal(buffer.Len(), len([]byte(fileContents)))
-		assert.Nil(err)
-	})
-
-	t.Run("specified path file exists but with a different name", func(t *testing.T) {
-		// Arrange
-		assert := assert.New(t)
-		name := "dev"
-		ignoreFilename := false
-		tempName := "test"
-		filename := "prod.env"
-		fileContents := "Hello world!"
-		expectedErr := newEnvNotFoundError()
-
-		// Act
-		tempDir, err := os.MkdirTemp("", tempName)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		pathOverride := tempDir
-
-		defer func() {
-			if err = os.RemoveAll(tempDir); err != nil {
-				assert.FailNow(err.Error())
-			}
-		}()
-
-		fp := filepath.Join(tempDir, filename)
-		tempFile, err := os.OpenFile(fp, os.O_CREATE|os.O_WRONLY, 0644)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		_, err = tempFile.WriteString(fileContents)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempFile.Close()
-
-		buffer, err := Load(name, pathOverride, ignoreFilename)
-
-		// Assert
-		if err == nil {
-			assert.FailNow("Error should not be nil.")
-		}
-
-		castErr, ok := err.(*errors.GofidentialError)
-
-		if !ok {
-			assert.FailNow("Error is not of type GofidentialError.")
-		}
-
-		assert.Empty(buffer.String())
-		assert.Equal(buffer.Len(), 0)
-		assert.Equal(castErr.Issuer, expectedErr.Issuer)
-		assert.Equal(castErr.Code, expectedErr.Code)
-		assert.Equal(castErr.Message, expectedErr.Message)
-		assert.WithinDuration(castErr.Timestamp, expectedErr.Timestamp, 5*time.Second)
-		assert.Equal(castErr.Suggestion, expectedErr.Suggestion)
-		assert.NotEmpty(castErr.StackTrace, expectedErr.StackTrace)
-		assert.Equal(castErr.Details, expectedErr.Details)
-	})
-
-	t.Run("specified path file exists ignore filename", func(t *testing.T) {
-		// Arrange
-		assert := assert.New(t)
-		name := "dev"
-		ignoreFilename := true
-		tempName := "test"
-		filename := ".env"
-		fileContents := "Hello world!"
-
-		// Act
-		tempDir, err := os.MkdirTemp("", tempName)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		pathOverride := tempDir
-
-		defer func() {
-			if err = os.RemoveAll(tempDir); err != nil {
-				assert.FailNow(err.Error())
-			}
-		}()
-
-		fp := filepath.Join(tempDir, filename)
-		tempFile, err := os.OpenFile(fp, os.O_CREATE|os.O_WRONLY, 0644)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		_, err = tempFile.WriteString(fileContents)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempFile.Close()
-
-		buffer, err := Load(name, pathOverride, ignoreFilename)
-
-		// Assert
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		assert.Equal(buffer.String(), fileContents)
-		assert.Equal(buffer.Len(), len([]byte(fileContents)))
-		assert.Nil(err)
-	})
-
-	t.Run("specified path file exists but with a different name ignore filename", func(t *testing.T) {
-		// Arrange
-		assert := assert.New(t)
-		name := "dev"
-		ignoreFilename := true
-		tempName := "test"
-		filename := "dev.env"
-		fileContents := "Hello world!"
-		expectedErr := newEnvNotFoundError()
-
-		// Act
-		tempDir, err := os.MkdirTemp("", tempName)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		pathOverride := tempDir
-
-		defer func() {
-			if err = os.RemoveAll(tempDir); err != nil {
-				assert.FailNow(err.Error())
-			}
-		}()
-
-		fp := filepath.Join(tempDir, filename)
-		tempFile, err := os.OpenFile(fp, os.O_CREATE|os.O_WRONLY, 0644)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		_, err = tempFile.WriteString(fileContents)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempFile.Close()
-
-		buffer, err := Load(name, pathOverride, ignoreFilename)
-
-		// Assert
-		if err == nil {
-			assert.FailNow("Error should not be nil.")
-		}
-
-		castErr, ok := err.(*errors.GofidentialError)
-
-		if !ok {
-			assert.FailNow("Error is not of type GofidentialError.")
-		}
-
-		assert.Empty(buffer.String())
-		assert.Equal(buffer.Len(), 0)
-		assert.Equal(castErr.Issuer, expectedErr.Issuer)
-		assert.Equal(castErr.Code, expectedErr.Code)
-		assert.Equal(castErr.Message, expectedErr.Message)
-		assert.WithinDuration(castErr.Timestamp, expectedErr.Timestamp, 5*time.Second)
-		assert.Equal(castErr.Suggestion, expectedErr.Suggestion)
-		assert.NotEmpty(castErr.StackTrace, expectedErr.StackTrace)
-		assert.Equal(castErr.Details, expectedErr.Details)
-	})
-
-	t.Run("specified path is not a valid directory", func(t *testing.T) {
-		// Arrange
-		assert := assert.New(t)
-		name := "dev"
-		ignoreFilename := false
-		tempName := "test"
-		filename := "dev.env"
-		fileContents := "Hello world!"
 		expectedErr := newPathIsNotDirError()
 
-		// Act
-		tempDir, err := os.MkdirTemp("", tempName)
+		tempDir, err := os.MkdirTemp("", tempDirName)
+		require.NoError(err, "Failed to create temporary dir")
 
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
+		t.Cleanup(func() {
+			err := os.RemoveAll(tempDir)
+			assert.NoError(err, "Failed to remove temporary dir")
+		})
 
-		defer func() {
-			if err = os.RemoveAll(tempDir); err != nil {
-				assert.FailNow(err.Error())
-			}
-		}()
+		fp := filepath.Join(tempDir, tempFilename)
 
-		fp := filepath.Join(tempDir, filename)
 		tempFile, err := os.OpenFile(fp, os.O_CREATE|os.O_WRONLY, 0644)
+		require.NoError(err, "Failed to create file in temporary dir.")
 
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
+		_, err = tempFile.WriteString(tempFileContents)
+		require.NoError(err, "Failed writing string to file.")
 
-		_, err = tempFile.WriteString(fileContents)
-
-		if err != nil {
-			assert.FailNow(err.Error())
-		}
-
-		tempFile.Close()
+		err = tempFile.Close()
+		assert.NoError(err, "Failed to close file in temporary dir.")
 
 		pathOverride := fp
 		buffer, err := Load(name, pathOverride, ignoreFilename)
-
-		// Assert
-		if err == nil {
-			assert.FailNow("Error should not be nil.")
-		}
+		require.Error(err, "An error was expected. But got none.")
 
 		castErr, ok := err.(*errors.GofidentialError)
-
-		if !ok {
-			assert.FailNow("Error is not of type GofidentialError.")
-		}
+		require.True(ok, "Error is not of type GofidentialError.")
 
 		assert.Empty(buffer.String())
 		assert.Equal(buffer.Len(), 0)
-		assert.Equal(castErr.Issuer, expectedErr.Issuer)
-		assert.Equal(castErr.Code, expectedErr.Code)
-		assert.Equal(castErr.Message, expectedErr.Message)
-		assert.WithinDuration(castErr.Timestamp, expectedErr.Timestamp, 5*time.Second)
-		assert.Equal(castErr.Suggestion, expectedErr.Suggestion)
-		assert.NotEmpty(castErr.StackTrace, expectedErr.StackTrace)
-		assert.Equal(castErr.Details, expectedErr.Details)
+		assert.Error(err, "An error was expected. But got none.")
+		assert.True(
+			castErr.Equal(expectedErr),
+			"The actual error does not match the expected one. Actual: %v, Expected: %v",
+			castErr,
+			expectedErr,
+		)
 	})
 }
