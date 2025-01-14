@@ -81,18 +81,6 @@ func newPathIsNotFileError() *errors.GofidentialError {
 	}
 }
 
-func newRootNotFoundError() *errors.GofidentialError {
-	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errors.RootNotFoundCode,
-		Message:    "Could not find the root dir.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Assert you are executing the project in the root dir or its sub directories.",
-		Details:    map[string]string{},
-	}
-}
-
 func newEnvNotFoundError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,

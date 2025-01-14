@@ -19,9 +19,6 @@ const (
 	// Occurs when the 'path' parameter specified in the Environment does not point to a file.
 	PathIsNotFileCode string = "PATH_IS_NOT_FILE"
 
-	// Occurs when the file loader could not find the root dir.
-	RootNotFoundCode string = "ROOT_NOT_FOUND"
-
 	// Occurs when the file loader could not find the target .env file.
 	EnvNotFoundCode string = "ENV_NOT_FOUND"
 )
