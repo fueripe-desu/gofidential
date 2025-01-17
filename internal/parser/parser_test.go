@@ -46,6 +46,11 @@ func Test_Parse(t *testing.T) {
 			},
 		},
 		{
+			name:           "should return an empty map if the file is empty",
+			fixtureName:    "empty_file.env",
+			expectedParsed: map[string]string{},
+		},
+		{
 			name:        "should return an error if assignment operator is missing",
 			fixtureName: "missing_assignment.env",
 			expectedErr: newMissingAssignmentError(3),
