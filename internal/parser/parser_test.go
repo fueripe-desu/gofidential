@@ -141,9 +141,9 @@ func Test_Parse(t *testing.T) {
 			expectedErr: newNumberKeyError(2),
 		},
 		{
-			name:        "should return an error if the key starts with an underscore",
-			fixtureName: "key_starts_with_underscore.env",
-			expectedErr: newKeyStartsWithUnderscoreError(2),
+			name:        "should return an error if the key has a leading underscore",
+			fixtureName: "leading_underscore.env",
+			expectedErr: newLeadingUnderscoreError(2),
 		},
 		{
 			name:        "should return an error if the key has a trailing underscore",
