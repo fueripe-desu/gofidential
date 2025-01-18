@@ -110,7 +110,14 @@ func (p *parser) Parse() (map[string]string, error) {
 					return nil, newEmptyValueError(p.lineNumber)
 				}
 
-				parsed[p.keyBuffer.String()] = p.valueBuffer.String()
+				key := p.keyBuffer.String()
+
+				// The key ends with an underscore
+				if key[len(key)-1] == '_' {
+					return nil, newTrailingUnderscoreError(p.lineNumber)
+				}
+
+				parsed[key] = p.valueBuffer.String()
 
 				p.nextLine()
 				continue

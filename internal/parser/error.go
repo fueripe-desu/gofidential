@@ -193,6 +193,20 @@ func newKeyStartsWithUnderscoreError(lineNumber int) *errors.GofidentialError {
 	}
 }
 
+func newTrailingUnderscoreError(lineNumber int) *errors.GofidentialError {
+	return &errors.GofidentialError{
+		Issuer:     moduleIssuer,
+		Code:       errors.TrailingUnderscoreCode,
+		Message:    "Key must not end with an underscore.",
+		Timestamp:  time.Now(),
+		StackTrace: debug.Stack(),
+		Suggestion: "Remove underscores in the end of the key name.",
+		Details: map[string]string{
+			"line_number": strconv.Itoa(lineNumber),
+		},
+	}
+}
+
 func newInvalidKeyCharsError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,

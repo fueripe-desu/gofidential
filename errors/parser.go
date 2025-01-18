@@ -43,6 +43,9 @@ const (
 	// Occurs when a key starts with an underscore in a .env file.
 	KeyStartsWithUnderscoreCode string = "KEY_STARTS_WITH_UNDERSCORE"
 
+	// Occurs when a key has a trailing underscore in a .env file.
+	TrailingUnderscoreCode string = "TRAILING_UNDERSCORE"
+
 	// Occurs when a key contains invalid characters in a .env file.
 	InvalidKeyCharsCode string = "INVALID_KEY_CHARS"
 
