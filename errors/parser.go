@@ -37,8 +37,8 @@ const (
 	// Occurs when a key contains lowercase characters in a .env file.
 	LowercaseKeyCode string = "LOWERCASE_KEY"
 
-	// Occurs when a key starts with a number in a .env file.
-	KeyStartsWithNumCode string = "KEY_STARTS_WITH_NUM"
+	// Occurs when a key contains number characters (0-9) in a .env file.
+	NumberKeyCode string = "KEY_STARTS_WITH_NUM"
 
 	// Occurs when a key starts with an underscore in a .env file.
 	KeyStartsWithUnderscoreCode string = "KEY_STARTS_WITH_UNDERSCORE"

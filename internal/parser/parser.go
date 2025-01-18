@@ -140,14 +140,14 @@ func (p *parser) handleParsingKey(b byte) error {
 		if b == '_' {
 			return newKeyStartsWithUnderscoreError(p.lineNumber)
 		}
-
-		if b >= '0' && b <= '9' {
-			return newKeyStartsWithNumError(p.lineNumber)
-		}
 	}
 
 	if b >= 'a' && b <= 'z' {
 		return newLowercaseKeyError(p.lineNumber)
+	}
+
+	if b >= '0' && b <= '9' {
+		return newNumberKeyError(p.lineNumber)
 	}
 
 	if b == '"' {

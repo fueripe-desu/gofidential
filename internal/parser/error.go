@@ -165,14 +165,14 @@ func newLowercaseKeyError(lineNumber int) *errors.GofidentialError {
 	}
 }
 
-func newKeyStartsWithNumError(lineNumber int) *errors.GofidentialError {
+func newNumberKeyError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.KeyStartsWithNumCode,
-		Message:    "Key must not start with a number.",
+		Code:       errors.NumberKeyCode,
+		Message:    "Key must not contain numbers.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
-		Suggestion: "Remove numbers in the beginning of the key name.",
+		Suggestion: "Remove any numbers from the key.",
 		Details: map[string]string{
 			"line_number": strconv.Itoa(lineNumber),
 		},
