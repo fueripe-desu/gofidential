@@ -10,14 +10,6 @@ type reflector struct {
 	ptrval reflect.Value
 }
 
-func (r *reflector) IsEmpty() bool {
-	return r.ptrval.NumField() == 0
-}
-
-func (r *reflector) FieldCount() int {
-	return r.ptrval.NumField()
-}
-
 func (r *reflector) SetField(name string, value string) error {
 	field := r.ptrval.FieldByName(name)
 
