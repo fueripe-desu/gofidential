@@ -4,6 +4,18 @@ const (
 	// Occurs when the 'name' parameter is not specified in the provided Environment.
 	MissingEnvNameCode string = "MISSING_ENV_NAME"
 
+	// Occurs when the 'name' parameter is not lowercase and underscores only.
+	InvalidEnvNameCode string = "INVALID_ENV_NAME"
+
+	// Occurs when the 'name' parameter is composed by only underscores.
+	UnderscoreEnvNameCode string = "UNDERSCORE_ENV_NAME"
+
+	// Occurs when the 'name' parameter contains a trailing underscore.
+	EnvNameTrailingUnderscoreCode string = "ENV_NAME_TRAILING_UNDERSCORE"
+
+	// Occurs when the 'name' parameter contains a leading underscore.
+	EnvNameLeadingUnderscoreCode string = "ENV_NAME_LEADING_UNDERSCORE"
+
 	// Occurs when the 'path' parameter specified in the Environment is not an existent dir.
 	EnvDirNotExistCode string = "ENV_FOLDER_NOT_EXIST"
 

@@ -5,7 +5,18 @@ import (
 	"errors"
 	"io"
 	"os"
+	"regexp"
 )
+
+func isLowerUnderscore(v string) bool {
+	regex := regexp.MustCompile(`^[a-z_]+$`)
+	return regex.MatchString(v)
+}
+
+func isUnderscore(v string) bool {
+	regex := regexp.MustCompile(`^[_]+$`)
+	return regex.MatchString(v)
+}
 
 func isValidDir(path string) error {
 	// Get file or directory info

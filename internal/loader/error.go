@@ -21,6 +21,54 @@ func newMissingEnvNameError() *errors.GofidentialError {
 	}
 }
 
+func newInvalidEnvNameError() *errors.GofidentialError {
+	return &errors.GofidentialError{
+		Issuer:     moduleIssuer,
+		Code:       errors.InvalidEnvNameCode,
+		Message:    "Environment name is invalid.",
+		Timestamp:  time.Now(),
+		StackTrace: debug.Stack(),
+		Suggestion: "Check if the provided environment name contains only lowercase letters (a-z) and underscores (_).",
+		Details:    map[string]string{},
+	}
+}
+
+func newUnderscoreEnvNameError() *errors.GofidentialError {
+	return &errors.GofidentialError{
+		Issuer:     moduleIssuer,
+		Code:       errors.UnderscoreEnvNameCode,
+		Message:    "Environment name must not be composed by underscores only.",
+		Timestamp:  time.Now(),
+		StackTrace: debug.Stack(),
+		Suggestion: "Add lowercases letters to the name so it does not contain only underscores.",
+		Details:    map[string]string{},
+	}
+}
+
+func newEnvNameTrailingUnderscoreError() *errors.GofidentialError {
+	return &errors.GofidentialError{
+		Issuer:     moduleIssuer,
+		Code:       errors.EnvNameTrailingUnderscoreCode,
+		Message:    "Environment name must not have trailing underscores.",
+		Timestamp:  time.Now(),
+		StackTrace: debug.Stack(),
+		Suggestion: "Remove trailing underscores from the environment name.",
+		Details:    map[string]string{},
+	}
+}
+
+func newEnvNameLeadingUnderscoreError() *errors.GofidentialError {
+	return &errors.GofidentialError{
+		Issuer:     moduleIssuer,
+		Code:       errors.EnvNameLeadingUnderscoreCode,
+		Message:    "Environment name must not have leading underscores.",
+		Timestamp:  time.Now(),
+		StackTrace: debug.Stack(),
+		Suggestion: "Remove leading underscores from the environment name.",
+		Details:    map[string]string{},
+	}
+}
+
 func newEnvDirNotExistError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
