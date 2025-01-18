@@ -179,10 +179,10 @@ func newNumberKeyError(lineNumber int) *errors.GofidentialError {
 	}
 }
 
-func newKeyStartsWithUnderscoreError(lineNumber int) *errors.GofidentialError {
+func newLeadingUnderscoreError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.KeyStartsWithUnderscoreCode,
+		Code:       errors.LeadingUnderscoreCode,
 		Message:    "Key must not start with a underscore.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),

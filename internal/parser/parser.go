@@ -145,7 +145,7 @@ func (p *parser) handleParsingKey(b byte) error {
 
 	if p.keyBuffer.Len() == 0 {
 		if b == '_' {
-			return newKeyStartsWithUnderscoreError(p.lineNumber)
+			return newLeadingUnderscoreError(p.lineNumber)
 		}
 	}
 
