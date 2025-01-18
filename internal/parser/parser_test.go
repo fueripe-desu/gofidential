@@ -146,6 +146,11 @@ func Test_Parse(t *testing.T) {
 			expectedErr: newKeyStartsWithUnderscoreError(2),
 		},
 		{
+			name:        "should return an error if the key has a trailing underscore",
+			fixtureName: "trailing_underscore.env",
+			expectedErr: newTrailingUnderscoreError(2),
+		},
+		{
 			name:        "should return an error if line has an inline comment",
 			fixtureName: "inline_comments.env",
 			expectedErr: newInlineCommentError(2),
