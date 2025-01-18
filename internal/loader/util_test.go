@@ -12,6 +12,230 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func Test_isLowerUnderscore(t *testing.T) {
+	testcases := []struct {
+		name     string
+		input    string
+		expected bool
+	}{
+		{
+			name:     "should return true if input is a single lowercase letter",
+			input:    "a",
+			expected: true,
+		},
+		{
+			name:     "should return true if input contains multiple lowercase letter",
+			input:    "abc",
+			expected: true,
+		},
+		{
+			name:     "should return true if input contains an underscore",
+			input:    "snake_case",
+			expected: true,
+		},
+		{
+			name:     "should return true if input contains multiple letters and underscores",
+			input:    "a_b_c_d",
+			expected: true,
+		},
+		{
+			name:     "should return true if input contains a leading underscore",
+			input:    "_a_b_c_d",
+			expected: true,
+		},
+		{
+			name:     "should return true if input contains a trailing underscore",
+			input:    "a_b_c_d_",
+			expected: true,
+		},
+		{
+			name:     "should return true if input contains only underscores",
+			input:    "_____",
+			expected: true,
+		},
+		{
+			name:     "should return false if input is empty",
+			input:    "",
+			expected: false,
+		},
+		{
+			name:     "should return false if input is an uppercase letter",
+			input:    "A",
+			expected: false,
+		},
+		{
+			name:     "should return false if input contains multiple uppercase letters",
+			input:    "ABC",
+			expected: false,
+		},
+		{
+			name:     "should return false if input is title snake case",
+			input:    "Snake_Case",
+			expected: false,
+		},
+		{
+			name:     "should return false if input is uppercase snake case",
+			input:    "SNAKE_CASE",
+			expected: false,
+		},
+		{
+			name:     "should return false if input is a number",
+			input:    "1",
+			expected: false,
+		},
+		{
+			name:     "should return false if input contains multiple numbers",
+			input:    "123",
+			expected: false,
+		},
+		{
+			name:     "should return false if input contains letters and numbers",
+			input:    "a1b2c3",
+			expected: false,
+		},
+		{
+			name:     "should return false if input contains special characters",
+			input:    "a-1.b,2@c#3",
+			expected: false,
+		},
+		{
+			name:     "should return false if input contains spaces",
+			input:    "a-1   .b,   2@c  #3",
+			expected: false,
+		},
+		{
+			name:     "should return false if input contains only spaces",
+			input:    "       ",
+			expected: false,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Arrange
+			assert := assert.New(t)
+
+			// Act
+			result := isLowerUnderscore(tc.input)
+
+			// Assert
+			assert.Equal(tc.expected, result)
+		})
+	}
+}
+
+func Test_isUnderscore(t *testing.T) {
+	testcases := []struct {
+		name     string
+		input    string
+		expected bool
+	}{
+		{
+			name:     "should return true if input is a single lowercase letter",
+			input:    "a",
+			expected: false,
+		},
+		{
+			name:     "should return true if input contains multiple lowercase letter",
+			input:    "abc",
+			expected: false,
+		},
+		{
+			name:     "should return true if input contains an underscore",
+			input:    "snake_case",
+			expected: false,
+		},
+		{
+			name:     "should return true if input contains multiple letters and underscores",
+			input:    "a_b_c_d",
+			expected: false,
+		},
+		{
+			name:     "should return true if input contains a leading underscore",
+			input:    "_a_b_c_d",
+			expected: false,
+		},
+		{
+			name:     "should return true if input contains a trailing underscore",
+			input:    "a_b_c_d_",
+			expected: false,
+		},
+		{
+			name:     "should return true if input contains only underscores",
+			input:    "_____",
+			expected: true,
+		},
+		{
+			name:     "should return false if input is empty",
+			input:    "",
+			expected: false,
+		},
+		{
+			name:     "should return false if input is an uppercase letter",
+			input:    "A",
+			expected: false,
+		},
+		{
+			name:     "should return false if input contains multiple uppercase letters",
+			input:    "ABC",
+			expected: false,
+		},
+		{
+			name:     "should return false if input is title snake case",
+			input:    "Snake_Case",
+			expected: false,
+		},
+		{
+			name:     "should return false if input is uppercase snake case",
+			input:    "SNAKE_CASE",
+			expected: false,
+		},
+		{
+			name:     "should return false if input is a number",
+			input:    "1",
+			expected: false,
+		},
+		{
+			name:     "should return false if input contains multiple numbers",
+			input:    "123",
+			expected: false,
+		},
+		{
+			name:     "should return false if input contains letters and numbers",
+			input:    "a1b2c3",
+			expected: false,
+		},
+		{
+			name:     "should return false if input contains special characters",
+			input:    "a-1.b,2@c#3",
+			expected: false,
+		},
+		{
+			name:     "should return false if input contains spaces",
+			input:    "a-1   .b,   2@c  #3",
+			expected: false,
+		},
+		{
+			name:     "should return false if input contains only spaces",
+			input:    "       ",
+			expected: false,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Arrange
+			assert := assert.New(t)
+
+			// Act
+			result := isUnderscore(tc.input)
+
+			// Assert
+			assert.Equal(tc.expected, result)
+		})
+	}
+}
+
 func Test_isValidDir(t *testing.T) {
 	t.Run("should return true if the path points to a valid dir", func(t *testing.T) {
 		assert := assert.New(t)

@@ -11,31 +11,107 @@ import (
 )
 
 func Test_Load(t *testing.T) {
-	t.Run("should return an error if name is empty", func(t *testing.T) {
-		require := require.New(t)
-		assert := assert.New(t)
+	nameTestcases := []struct {
+		name        string
+		inputName   string
+		expectedErr *errors.GofidentialError
+	}{
+		{
+			name:        "should return an error if name is empty",
+			inputName:   "",
+			expectedErr: newMissingEnvNameError(),
+		},
+		{
+			name:        "should return an error if name is underscores only",
+			inputName:   "_____",
+			expectedErr: newUnderscoreEnvNameError(),
+		},
+		{
+			name:        "should return an error if name has a trailing underscore",
+			inputName:   "a_b_c___",
+			expectedErr: newEnvNameTrailingUnderscoreError(),
+		},
+		{
+			name:        "should return an error if name has a leading underscore",
+			inputName:   "___a_b_c",
+			expectedErr: newEnvNameLeadingUnderscoreError(),
+		},
+		{
+			name:        "should return an error if name is a single uppercase letter",
+			inputName:   "A",
+			expectedErr: newInvalidEnvNameError(),
+		},
+		{
+			name:        "should return an error if name contains multiple uppercase letters",
+			inputName:   "ABC",
+			expectedErr: newInvalidEnvNameError(),
+		},
+		{
+			name:        "should return an error if name is title snake case",
+			inputName:   "Snake_Case",
+			expectedErr: newInvalidEnvNameError(),
+		},
+		{
+			name:        "should return an error if name is uppercase snake case",
+			inputName:   "SNAKE_CASE",
+			expectedErr: newInvalidEnvNameError(),
+		},
+		{
+			name:        "should return an error if name is a number",
+			inputName:   "1",
+			expectedErr: newInvalidEnvNameError(),
+		},
+		{
+			name:        "should return an error if name contains multiple numbers",
+			inputName:   "123",
+			expectedErr: newInvalidEnvNameError(),
+		},
+		{
+			name:        "should return an error if name contains letters and numbers",
+			inputName:   "a1b2c3",
+			expectedErr: newInvalidEnvNameError(),
+		},
+		{
+			name:        "should return an error if name contains special characters",
+			inputName:   "a-1.b,2@c#3",
+			expectedErr: newInvalidEnvNameError(),
+		},
+		{
+			name:        "should return an error if name contains spaces",
+			inputName:   "a-1   .b,   2@c  #3",
+			expectedErr: newInvalidEnvNameError(),
+		},
+		{
+			name:        "should return an error if name contains only spaces",
+			inputName:   "       ",
+			expectedErr: newMissingEnvNameError(),
+		},
+	}
 
-		name := ""
-		defaultPath := ""
-		ignoreFilename := false
+	for _, tc := range nameTestcases {
+		t.Run(tc.name, func(t *testing.T) {
+			require := require.New(t)
+			assert := assert.New(t)
 
-		expectedErr := newMissingEnvNameError()
+			defaultPath := ""
+			ignoreFilename := false
 
-		buffer, err := Load(name, defaultPath, ignoreFilename)
-		require.Error(err, "An error was expected. But got none.")
+			buffer, err := Load(tc.inputName, defaultPath, ignoreFilename)
+			require.Error(err, "An error was expected. But got none.")
 
-		castErr, ok := err.(*errors.GofidentialError)
-		require.True(ok, "Error is not of type GofidentialError.")
+			castErr, ok := err.(*errors.GofidentialError)
+			require.True(ok, "Error is not of type GofidentialError.")
 
-		assert.Empty(buffer.String())
-		assert.Equal(buffer.Len(), 0)
-		assert.True(
-			castErr.Equal(expectedErr),
-			"The actual error does not match the expected one. Actual: %v, Expected: %v",
-			castErr,
-			expectedErr,
-		)
-	})
+			assert.Empty(buffer.String())
+			assert.Equal(buffer.Len(), 0)
+			assert.True(
+				castErr.Equal(tc.expectedErr),
+				"The actual error does not match the expected one. Actual: %v, Expected: %v",
+				castErr,
+				tc.expectedErr,
+			)
+		})
+	}
 
 	defaultPathTestcases := []struct {
 		name string
