@@ -133,7 +133,12 @@ func Test_Parse(t *testing.T) {
 		{
 			name:        "should return an error if the key starts with a number",
 			fixtureName: "key_starts_with_num.env",
-			expectedErr: newKeyStartsWithNumError(2),
+			expectedErr: newNumberKeyError(2),
+		},
+		{
+			name:        "should return an error if the key contains any numbers",
+			fixtureName: "key_contains_numbers.env",
+			expectedErr: newNumberKeyError(2),
 		},
 		{
 			name:        "should return an error if the key starts with an underscore",
