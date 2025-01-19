@@ -14,28 +14,28 @@ func Load(name string, overridePath string, ignoreFilename bool) (bytes.Buffer, 
 	// If the name of the environment is not defined, then it's not possible
 	// to know the .env filename.
 	if name == "" {
-		return bytes.Buffer{}, newMissingEnvNameError()
+		return bytes.Buffer{}, newMissingNameError()
 	}
 
 	// If the env name contains uppercase letters, numbers or special characters,
 	// it must be rejected.
 	if !isLowerUnderscore(name) {
-		return bytes.Buffer{}, newInvalidEnvNameError()
+		return bytes.Buffer{}, newInvalidNameError()
 	}
 
 	// If the env name is composed by underscores only, it must be rejected.
 	if isUnderscore(name) {
-		return bytes.Buffer{}, newUnderscoreEnvNameError()
+		return bytes.Buffer{}, newUnderscoreOnlyNameError()
 	}
 
 	// If the env name contains a leading underscore, it must be rejected.
 	if name[0] == '_' {
-		return bytes.Buffer{}, newEnvNameLeadingUnderscoreError()
+		return bytes.Buffer{}, newLeadingUnderscoreError()
 	}
 
 	// If the env name contains a trailing underscore, it must be rejected.
 	if name[len(name)-1] == '_' {
-		return bytes.Buffer{}, newEnvNameTrailingUnderscoreError()
+		return bytes.Buffer{}, newTrailingUnderscoreError()
 	}
 
 	// If the filename must be ignored, then the non-empty name is set to an empty string,

@@ -2,35 +2,35 @@ package loader
 
 const (
 	// Occurs when the 'name' parameter is not specified in the provided Environment.
-	MissingEnvNameCode string = "MISSING_ENV_NAME"
+	MissingName string = "LOADER_MISSING_NAME"
 
 	// Occurs when the 'name' parameter is not lowercase and underscores only.
-	InvalidEnvNameCode string = "INVALID_ENV_NAME"
+	InvalidName string = "LOADER_INVALID_NAME"
 
 	// Occurs when the 'name' parameter is composed by only underscores.
-	UnderscoreEnvNameCode string = "UNDERSCORE_ENV_NAME"
+	UnderscoreOnlyName string = "LOADER_UNDERSCORE_ONLY_NAME"
 
 	// Occurs when the 'name' parameter contains a trailing underscore.
-	EnvNameTrailingUnderscoreCode string = "ENV_NAME_TRAILING_UNDERSCORE"
+	TrailingUnderscore string = "LOADER_TRAILING_UNDERSCORE"
 
 	// Occurs when the 'name' parameter contains a leading underscore.
-	EnvNameLeadingUnderscoreCode string = "ENV_NAME_LEADING_UNDERSCORE"
+	LeadingUnderscore string = "LOADER_LEADING_UNDERSCORE"
 
 	// Occurs when the 'path' parameter specified in the Environment is not an existent dir.
-	EnvDirNotExistCode string = "ENV_FOLDER_NOT_EXIST"
+	InexistentDir string = "LOADER_INEXISTENT_DIR"
 
 	// Occurs when the 'path' parameter specified in the Environment could not be read. E.g. Permission denied.
-	FailedToReadDirCode string = "FAILED_TO_READ_FOLDER"
+	FailedToReadDir string = "LOADER_FAILED_TO_READ_DIR"
 
 	// Occurs when a file could not be read due to an unexpected error. E.g. Permission denied.
-	FailedToReadFileCode string = "FAILED_TO_READ_FILE"
+	FailedToReadEnv string = "LOADER_FAILED_TO_READ_ENV"
 
 	// Occurs when the 'path' parameter specified in the Environment does not point to a dir.
-	PathIsNotDirCode string = "PATH_IS_NOT_FOLDER"
+	PathIsNotDir string = "LOADER_PATH_IS_NOT_DIR"
 
 	// Occurs when the 'path' parameter specified in the Environment does not point to a file.
-	PathIsNotFileCode string = "PATH_IS_NOT_FILE"
+	PathIsNotFile string = "LOADER_PATH_IS_NOT_FILE"
 
 	// Occurs when the file loader could not find the target .env file.
-	EnvNotFoundCode string = "ENV_NOT_FOUND"
+	EnvNotFound string = "LOADER_ENV_NOT_FOUND"
 )

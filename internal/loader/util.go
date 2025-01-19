@@ -25,7 +25,7 @@ func isValidDir(path string) error {
 	if err != nil {
 		// If the path doesn't exist or is invalid
 		if os.IsNotExist(err) {
-			return newEnvDirNotExistError()
+			return newInexistentDirError()
 		}
 		// Other errors (e.g., permission issues)
 		return newFailedToReadDirError()
@@ -45,7 +45,7 @@ func fileExists(path string) (bool, error) {
 	if errors.Is(err, os.ErrNotExist) {
 		return false, nil
 	} else if err != nil {
-		return false, newFailedToReadFileError()
+		return false, newFailedToReadEnvError()
 	}
 
 	if info.IsDir() {
@@ -60,7 +60,7 @@ func openFile(path string) (bytes.Buffer, error) {
 	file, err := os.Open(path)
 
 	if err != nil {
-		return buffer, newFailedToReadFileError()
+		return buffer, newFailedToReadEnvError()
 	}
 
 	defer file.Close()
@@ -68,7 +68,7 @@ func openFile(path string) (bytes.Buffer, error) {
 	_, err = io.Copy(&buffer, file)
 
 	if err != nil {
-		return buffer, newFailedToReadFileError()
+		return buffer, newFailedToReadEnvError()
 	}
 
 	return buffer, nil
