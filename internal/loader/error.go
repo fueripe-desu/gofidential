@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/fueripe-desu/gofidential/errors"
+	errorCode "github.com/fueripe-desu/gofidential/errors/loader"
 )
 
 const moduleIssuer string = "GoFidential/File loader"
@@ -12,7 +13,7 @@ const moduleIssuer string = "GoFidential/File loader"
 func newMissingEnvNameError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.MissingEnvNameCode,
+		Code:       errorCode.MissingEnvNameCode,
 		Message:    "Name is required.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -24,7 +25,7 @@ func newMissingEnvNameError() *errors.GofidentialError {
 func newInvalidEnvNameError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.InvalidEnvNameCode,
+		Code:       errorCode.InvalidEnvNameCode,
 		Message:    "Environment name is invalid.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -36,7 +37,7 @@ func newInvalidEnvNameError() *errors.GofidentialError {
 func newUnderscoreEnvNameError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.UnderscoreEnvNameCode,
+		Code:       errorCode.UnderscoreEnvNameCode,
 		Message:    "Environment name must not be composed by underscores only.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -48,7 +49,7 @@ func newUnderscoreEnvNameError() *errors.GofidentialError {
 func newEnvNameTrailingUnderscoreError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.EnvNameTrailingUnderscoreCode,
+		Code:       errorCode.EnvNameTrailingUnderscoreCode,
 		Message:    "Environment name must not have trailing underscores.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -60,7 +61,7 @@ func newEnvNameTrailingUnderscoreError() *errors.GofidentialError {
 func newEnvNameLeadingUnderscoreError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.EnvNameLeadingUnderscoreCode,
+		Code:       errorCode.EnvNameLeadingUnderscoreCode,
 		Message:    "Environment name must not have leading underscores.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -72,7 +73,7 @@ func newEnvNameLeadingUnderscoreError() *errors.GofidentialError {
 func newEnvDirNotExistError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.EnvDirNotExistCode,
+		Code:       errorCode.EnvDirNotExistCode,
 		Message:    "Dir path does not exist.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -84,7 +85,7 @@ func newEnvDirNotExistError() *errors.GofidentialError {
 func newFailedToReadDirError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.FailedToReadDirCode,
+		Code:       errorCode.FailedToReadDirCode,
 		Message:    "Failed to read dir.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -96,7 +97,7 @@ func newFailedToReadDirError() *errors.GofidentialError {
 func newFailedToReadFileError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.FailedToReadFileCode,
+		Code:       errorCode.FailedToReadFileCode,
 		Message:    "Failed to read file.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -108,7 +109,7 @@ func newFailedToReadFileError() *errors.GofidentialError {
 func newPathIsNotDirError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.PathIsNotDirCode,
+		Code:       errorCode.PathIsNotDirCode,
 		Message:    "Path does not point to a dir.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -120,7 +121,7 @@ func newPathIsNotDirError() *errors.GofidentialError {
 func newPathIsNotFileError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.PathIsNotFileCode,
+		Code:       errorCode.PathIsNotFileCode,
 		Message:    "Path does not point to a file.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -132,7 +133,7 @@ func newPathIsNotFileError() *errors.GofidentialError {
 func newEnvNotFoundError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.EnvNotFoundCode,
+		Code:       errorCode.EnvNotFoundCode,
 		Message:    "Could not find target .env file.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),

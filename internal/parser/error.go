@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/fueripe-desu/gofidential/errors"
+	errorCode "github.com/fueripe-desu/gofidential/errors/parser"
 )
 
 const moduleIssuer string = "GoFidential/Parser"
@@ -13,7 +14,7 @@ const moduleIssuer string = "GoFidential/Parser"
 func newMissingAssignmentError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.MissingAssignmentCode,
+		Code:       errorCode.MissingAssignmentCode,
 		Message:    "Missing assignment operator.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -27,7 +28,7 @@ func newMissingAssignmentError(lineNumber int) *errors.GofidentialError {
 func newMissingKeyError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.MissingKeyCode,
+		Code:       errorCode.MissingKeyCode,
 		Message:    "Key is missing.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -41,7 +42,7 @@ func newMissingKeyError(lineNumber int) *errors.GofidentialError {
 func newMissingValueError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.MissingValueCode,
+		Code:       errorCode.MissingValueCode,
 		Message:    "Value is missing.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -55,7 +56,7 @@ func newMissingValueError(lineNumber int) *errors.GofidentialError {
 func newEmptyValueError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.EmptyValueCode,
+		Code:       errorCode.EmptyValueCode,
 		Message:    "Value must not be empty.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -69,7 +70,7 @@ func newEmptyValueError(lineNumber int) *errors.GofidentialError {
 func newSingleQuotesError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.SingleQuotesCode,
+		Code:       errorCode.SingleQuotesCode,
 		Message:    "Single quotes are not allowed.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -83,7 +84,7 @@ func newSingleQuotesError(lineNumber int) *errors.GofidentialError {
 func newUnquotedValueError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.UnquotedValueCode,
+		Code:       errorCode.UnquotedValueCode,
 		Message:    "Value is not double quoted.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -97,7 +98,7 @@ func newUnquotedValueError(lineNumber int) *errors.GofidentialError {
 func newUnterminatedQuoteError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.UnterminatedQuoteCode,
+		Code:       errorCode.UnterminatedQuoteCode,
 		Message:    "Unterminated quote found.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -111,7 +112,7 @@ func newUnterminatedQuoteError(lineNumber int) *errors.GofidentialError {
 func newSpacedSeparatorError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.SpacedSeparatorCode,
+		Code:       errorCode.SpacedSeparatorCode,
 		Message:    "Assignment operator must not have spaces around it.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -125,7 +126,7 @@ func newSpacedSeparatorError(lineNumber int) *errors.GofidentialError {
 func newLeadingSpaceError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.LeadingSpaceCode,
+		Code:       errorCode.LeadingSpaceCode,
 		Message:    "Leading spaces before key are not allowed.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -139,7 +140,7 @@ func newLeadingSpaceError(lineNumber int) *errors.GofidentialError {
 func newUnallowedEscapeError(lineNumber int, invalidEscape string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.UnallowedEscapeCode,
+		Code:       errorCode.UnallowedEscapeCode,
 		Message:    "Escape character is not allowed.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -154,7 +155,7 @@ func newUnallowedEscapeError(lineNumber int, invalidEscape string) *errors.Gofid
 func newLowercaseKeyError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.LowercaseKeyCode,
+		Code:       errorCode.LowercaseKeyCode,
 		Message:    "Key must not be lowercase.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -168,7 +169,7 @@ func newLowercaseKeyError(lineNumber int) *errors.GofidentialError {
 func newNumberKeyError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.NumberKeyCode,
+		Code:       errorCode.NumberKeyCode,
 		Message:    "Key must not contain numbers.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -182,7 +183,7 @@ func newNumberKeyError(lineNumber int) *errors.GofidentialError {
 func newLeadingUnderscoreError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.LeadingUnderscoreCode,
+		Code:       errorCode.LeadingUnderscoreCode,
 		Message:    "Key must not start with a underscore.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -196,7 +197,7 @@ func newLeadingUnderscoreError(lineNumber int) *errors.GofidentialError {
 func newTrailingUnderscoreError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.TrailingUnderscoreCode,
+		Code:       errorCode.TrailingUnderscoreCode,
 		Message:    "Key must not end with an underscore.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -210,7 +211,7 @@ func newTrailingUnderscoreError(lineNumber int) *errors.GofidentialError {
 func newInvalidKeyCharsError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.InvalidKeyCharsCode,
+		Code:       errorCode.InvalidKeyCharsCode,
 		Message:    "Key is not alphanumeric.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -224,7 +225,7 @@ func newInvalidKeyCharsError(lineNumber int) *errors.GofidentialError {
 func newInlineCommentError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.InlineCommentCode,
+		Code:       errorCode.InlineCommentCode,
 		Message:    "Inline comments are not allowed.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -238,7 +239,7 @@ func newInlineCommentError(lineNumber int) *errors.GofidentialError {
 func newUnescapedQuoteError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.UnescapedQuoteCode,
+		Code:       errorCode.UnescapedQuoteCode,
 		Message:    "Unescaped quote found.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -252,7 +253,7 @@ func newUnescapedQuoteError(lineNumber int) *errors.GofidentialError {
 func newMultilineValueError(lineNumber int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errors.MultilineValueCode,
+		Code:       errorCode.MultilineValueCode,
 		Message:    "Multiline values are not allowed.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),

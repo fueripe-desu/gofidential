@@ -1,4 +1,4 @@
-package errors
+package parser
 
 const (
 	// Occurs when the assignment operator is missing.

@@ -1,4 +1,4 @@
-package errors
+package reflector
 
 const (
 	// Occurs when the 'data' parameter is nil.

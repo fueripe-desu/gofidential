@@ -1,4 +1,4 @@
-package errors
+package loader
 
 const (
 	// Occurs when the 'name' parameter is not specified in the provided Environment.
