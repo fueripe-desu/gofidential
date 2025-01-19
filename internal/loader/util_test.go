@@ -261,7 +261,7 @@ func Test_isValidDir(t *testing.T) {
 		require := require.New(t)
 		assert := assert.New(t)
 
-		expectedErr := newEnvDirNotExistError()
+		expectedErr := newInexistentDirError()
 
 		err := isValidDir("unknown")
 		require.Error(err, "An error was expected. But got none.")
@@ -447,7 +447,7 @@ func Test_openFile(t *testing.T) {
 
 		filename := "unknown.txt"
 
-		expectedErr := newFailedToReadFileError()
+		expectedErr := newFailedToReadEnvError()
 
 		buffer, err := openFile(filename)
 		require.Error(err, "An error was expected. But got none.")

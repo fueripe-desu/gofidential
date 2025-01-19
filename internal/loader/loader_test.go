@@ -19,72 +19,72 @@ func Test_Load(t *testing.T) {
 		{
 			name:        "should return an error if name is empty",
 			inputName:   "",
-			expectedErr: newMissingEnvNameError(),
+			expectedErr: newMissingNameError(),
 		},
 		{
 			name:        "should return an error if name is underscores only",
 			inputName:   "_____",
-			expectedErr: newUnderscoreEnvNameError(),
+			expectedErr: newUnderscoreOnlyNameError(),
 		},
 		{
 			name:        "should return an error if name has a trailing underscore",
 			inputName:   "a_b_c___",
-			expectedErr: newEnvNameTrailingUnderscoreError(),
+			expectedErr: newTrailingUnderscoreError(),
 		},
 		{
 			name:        "should return an error if name has a leading underscore",
 			inputName:   "___a_b_c",
-			expectedErr: newEnvNameLeadingUnderscoreError(),
+			expectedErr: newLeadingUnderscoreError(),
 		},
 		{
 			name:        "should return an error if name is a single uppercase letter",
 			inputName:   "A",
-			expectedErr: newInvalidEnvNameError(),
+			expectedErr: newInvalidNameError(),
 		},
 		{
 			name:        "should return an error if name contains multiple uppercase letters",
 			inputName:   "ABC",
-			expectedErr: newInvalidEnvNameError(),
+			expectedErr: newInvalidNameError(),
 		},
 		{
 			name:        "should return an error if name is title snake case",
 			inputName:   "Snake_Case",
-			expectedErr: newInvalidEnvNameError(),
+			expectedErr: newInvalidNameError(),
 		},
 		{
 			name:        "should return an error if name is uppercase snake case",
 			inputName:   "SNAKE_CASE",
-			expectedErr: newInvalidEnvNameError(),
+			expectedErr: newInvalidNameError(),
 		},
 		{
 			name:        "should return an error if name is a number",
 			inputName:   "1",
-			expectedErr: newInvalidEnvNameError(),
+			expectedErr: newInvalidNameError(),
 		},
 		{
 			name:        "should return an error if name contains multiple numbers",
 			inputName:   "123",
-			expectedErr: newInvalidEnvNameError(),
+			expectedErr: newInvalidNameError(),
 		},
 		{
 			name:        "should return an error if name contains letters and numbers",
 			inputName:   "a1b2c3",
-			expectedErr: newInvalidEnvNameError(),
+			expectedErr: newInvalidNameError(),
 		},
 		{
 			name:        "should return an error if name contains special characters",
 			inputName:   "a-1.b,2@c#3",
-			expectedErr: newInvalidEnvNameError(),
+			expectedErr: newInvalidNameError(),
 		},
 		{
 			name:        "should return an error if name contains spaces",
 			inputName:   "a-1   .b,   2@c  #3",
-			expectedErr: newInvalidEnvNameError(),
+			expectedErr: newInvalidNameError(),
 		},
 		{
 			name:        "should return an error if name contains only spaces",
 			inputName:   "       ",
-			expectedErr: newMissingEnvNameError(),
+			expectedErr: newMissingNameError(),
 		},
 	}
 
