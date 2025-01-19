@@ -5,6 +5,21 @@ import (
 	"strings"
 )
 
+// The [parser.parser] struct encapsulates the state and functions required to parse
+// a .env file's byte buffer into a map of key-value pairs.
+//
+// This struct maintains the parser's state, buffers, and position tracking during the
+// parsing process. It uses a finite state machine (FSM) to handle the parsing logic.
+//
+// Fields:
+//   - data ([]byte): A normalized copy of the byte buffer, with line endings unified.
+//   - lineNumber (int): The current line number the parser is processing in the buffer.
+//   - colmNumber (int): The current column number the parser pointer is positioned at.
+//   - keyBuffer (strings.Builder): A buffer for constructing the key from the parsed bytes.
+//   - valueBuffer (strings.Builder): A buffer for constructing the value from the parsed bytes.
+//   - hasPrecedingSpace (bool): Indicates if the previous character was a space. Used for error validation.
+//   - isEscape (bool): Indicates if the previous character was a backslash. Used for escape handling and error checking.
+//   - state (parser.parserState): Represents the current state of the parser's finite state machine.
 type parser struct {
 	data []byte
 
@@ -20,6 +35,12 @@ type parser struct {
 	state parserState
 }
 
+// The [parser.parser.Parse] method processes the byte buffer initialized in the parser
+// instance and converts it into a map of key-value pairs representing the contents of a .env file.
+//
+// Returns:
+//   - map[string]string: A map containing the parsed key-value pairs from the .env file.
+//   - error: An error indicating why the parsing process failed.
 func (p *parser) Parse() (map[string]string, error) {
 	parsed := map[string]string{}
 
@@ -138,6 +159,18 @@ func (p *parser) Parse() (map[string]string, error) {
 	return parsed, nil
 }
 
+// The [parser.parser.handleParsingKey] method is an internal parser function
+// responsible for handling the "ParsingKey" state of the parser's finite
+// state machine (FSM). It is implemented as a separate function to allow
+// reuse across multiple parts of the system.
+//
+// Parameters:
+//   - b (byte): The current byte being processed from the buffer.
+//   - globalIndex (int): The zero-based index of the byte in the entire
+//     buffer, independent of line and column.
+//
+// Returns:
+//   - error: An error explaining why processing the current key byte failed.
 func (p *parser) handleParsingKey(b byte, globalIndex int) error {
 	if b == ' ' {
 		p.hasPrecedingSpace = true
@@ -191,6 +224,17 @@ func (p *parser) handleParsingKey(b byte, globalIndex int) error {
 	return nil
 }
 
+// The [parser.parser.getKeyErrorBuffer] method retrieves the remaining portion of a key
+// when an error occurs during key parsing. Since the parser processes one byte at a time,
+// an error interrupts parsing, leaving the pointer at its current position without advancing
+// to the end of the key. This method ensures the full key can be extracted for use in error messages.
+//
+// Parameters:
+//   - globalIndex (int): The zero-based index of the current byte in the buffer, independent
+//     of line and column.
+//
+// Returns:
+//   - strings.Builder: A buffer containing the full key string for error reporting purposes.
 func (p *parser) getKeyErrorBuffer(globalIndex int) strings.Builder {
 	var errBuffer strings.Builder
 
@@ -209,14 +253,30 @@ func (p *parser) getKeyErrorBuffer(globalIndex int) strings.Builder {
 	return errBuffer
 }
 
+// The [parser.parser.isEndOfLine] method is an internal helper function that checks
+// whether the given byte represents a newline character. This improves code readability
+// by abstracting the newline check logic.
+//
+// Parameters:
+//   - b (byte): The byte to evaluate.
+//
+// Returns:
+//   - bool: True if the input byte is a newline character; false otherwise.
 func (p *parser) isEndOfLine(b byte) bool {
 	return b == '\n'
 }
 
+// The [parser.parser.nextColumn] method is an internal helper function that increments
+// the [parser.parser.colmNumber] field. This field tracks the current column number
+// in the parsing process for accurate error reporting and state management.
 func (p *parser) nextColumn() {
 	p.colmNumber++
 }
 
+// The [parser.parser.nextLine] method is an internal helper function that resets
+// the parser state for a new line. It clears the key and value buffers, restarts
+// the column counter, and increments the line number, preparing the parser for
+// the next line of input.
 func (p *parser) nextLine() {
 	// Resets initial state.
 	p.state = BeforeKey
@@ -232,6 +292,16 @@ func (p *parser) nextLine() {
 	p.colmNumber = 1
 }
 
+// The [parser.newParser] function creates a new parser instance from a bytes buffer.
+//
+// Parameters:
+//   - buffer (bytes.Buffer): The buffer containing the bytes to be parsed.
+//
+// Returns:
+//   - *parser: The new parser instance.
+//
+// Notes:
+//   - This function normalizes new line characters in the buffer before storing them.
 func newParser(buffer bytes.Buffer) *parser {
 	// Converts Windows-style newline to only a newline escape character.
 	byteData := bytes.Replace(buffer.Bytes(), []byte("\r\n"), []byte("\n"), -1)
@@ -245,6 +315,15 @@ func newParser(buffer bytes.Buffer) *parser {
 	}
 }
 
+// The [parser.Parse] function parses the contents of a .env file from a byte buffer
+// into a map of key-value pairs.
+//
+// Parameters:
+//   - buffer (bytes.Buffer): The buffer containing the bytes of the .env file.
+//
+// Returns:
+//   - map[string]string: A map containing the parsed key-value pairs from the .env file.
+//   - error: An error indicating why the parsing process failed.
 func Parse(buffer bytes.Buffer) (map[string]string, error) {
 	// Converts Windows-style newline to only a newline escape character.
 	byteData := bytes.Replace(buffer.Bytes(), []byte("\r\n"), []byte("\n"), -1)
