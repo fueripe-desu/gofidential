@@ -1,7 +1,7 @@
 // Package errors defines error structures and provides utility functions for
 // comparing and distinguishing errors originating from the gofidential package.
 //
-// This package exports the [gofidential.GofidentialError] struct, which serves
+// This package exports the [errors.GofidentialError] struct, which serves
 // as the base error type for all errors returned by gofidential.
 //
 // Additionally, it contains the subpackages "loader," "parser," and "reflector,"
@@ -11,7 +11,7 @@
 // and handle them separately in your application.
 package errors
 
-// The [gofidential.GofidentialError] struct is the base for all errors in this package.
+// The [errors.GofidentialError] struct is the base for all errors in this package.
 //
 // Notes:
 //   - "Code" is always unique and begins with the module that issued the error,
@@ -34,7 +34,8 @@ func (e *GofidentialError) Error() string {
 	return e.Message
 }
 
-// Compares this error with another and returns true if both errors are identical.
+// The [errors.GofidentialError.Equal] method compares this error with another and
+// returns true if both errors are identical.
 //
 // Parameters:
 //   - other (*GofientialError): The error to compare against.
