@@ -1,3 +1,10 @@
+// Package loader provides functionality to load a .env file into memory
+// and return its contents as a byte buffer.
+//
+// The core component of this package is the [loader.loader] struct, which
+// manages the file loading process. The package exposes the [loader.Load]
+// function, which initiates the file loading and generates the byte buffer
+// containing the file's contents.
 package loader
 
 import (
