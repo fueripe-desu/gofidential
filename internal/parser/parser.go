@@ -292,29 +292,6 @@ func (p *parser) nextLine() {
 	p.colmNumber = 1
 }
 
-// The [parser.newParser] function creates a new parser instance from a bytes buffer.
-//
-// Parameters:
-//   - buffer (bytes.Buffer): The buffer containing the bytes to be parsed.
-//
-// Returns:
-//   - *parser: The new parser instance.
-//
-// Notes:
-//   - This function normalizes new line characters in the buffer before storing them.
-func newParser(buffer bytes.Buffer) *parser {
-	// Converts Windows-style newline to only a newline escape character.
-	byteData := bytes.Replace(buffer.Bytes(), []byte("\r\n"), []byte("\n"), -1)
-
-	return &parser{
-		data:              byteData,
-		lineNumber:        1,
-		colmNumber:        1,
-		hasPrecedingSpace: false,
-		state:             BeforeKey,
-	}
-}
-
 // The [parser.Parse] function parses the contents of a .env file from a byte buffer
 // into a map of key-value pairs.
 //
@@ -324,6 +301,9 @@ func newParser(buffer bytes.Buffer) *parser {
 // Returns:
 //   - map[string]string: A map containing the parsed key-value pairs from the .env file.
 //   - error: An error indicating why the parsing process failed.
+//
+// Notes:
+//   - This function normalizes new line characters in the buffer before storing them.
 func Parse(buffer bytes.Buffer) (map[string]string, error) {
 	// Converts Windows-style newline to only a newline escape character.
 	byteData := bytes.Replace(buffer.Bytes(), []byte("\r\n"), []byte("\n"), -1)
