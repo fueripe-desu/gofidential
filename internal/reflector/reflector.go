@@ -15,11 +15,8 @@ import (
 // The [reflector.reflector] struct wraps around a struct pointer and provides
 // reflection-based operations that can be performed on the struct. For example,
 // it allows listing all field names and values or assigning a value to a specific field.
-//
-// Fields:
-//   - ptrval (reflect.Value): The reflection of the struct pointer, used to access
-//     and manipulate the fields of the struct.
 type reflector struct {
+	// The reflection of the struct pointer, used to access and manipulate the fields of the struct.
 	ptrval reflect.Value
 }
 

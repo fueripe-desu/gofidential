@@ -17,28 +17,29 @@ import (
 //
 // This struct maintains the parser's state, buffers, and position tracking during the
 // parsing process. It uses a finite state machine (FSM) to handle the parsing logic.
-//
-// Fields:
-//   - data ([]byte): A normalized copy of the byte buffer, with line endings unified.
-//   - lineNumber (int): The current line number the parser is processing in the buffer.
-//   - colmNumber (int): The current column number the parser pointer is positioned at.
-//   - keyBuffer (strings.Builder): A buffer for constructing the key from the parsed bytes.
-//   - valueBuffer (strings.Builder): A buffer for constructing the value from the parsed bytes.
-//   - hasPrecedingSpace (bool): Indicates if the previous character was a space. Used for error validation.
-//   - isEscape (bool): Indicates if the previous character was a backslash. Used for escape handling and error checking.
-//   - state (parser.parserState): Represents the current state of the parser's finite state machine.
 type parser struct {
+	// A normalized copy of the byte buffer, with line endings unified.
 	data []byte
 
+	// The current line number the parser is processing in the buffer.
 	lineNumber int
+
+	// The current column number the parser pointer is positioned at.
 	colmNumber int
 
-	keyBuffer   strings.Builder
+	// A buffer for constructing the key from the parsed bytes.
+	keyBuffer strings.Builder
+
+	// A buffer for constructing the value from the parsed bytes.
 	valueBuffer strings.Builder
 
+	// Indicates if the previous character was a space. Used for error validation.
 	hasPrecedingSpace bool
-	isEscape          bool
 
+	// Indicates if the previous character was a backslash. Used for escape handling and error checking.
+	isEscape bool
+
+	// Represents the current state of the parser's finite state machine.
 	state parserState
 }
 

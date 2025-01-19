@@ -13,19 +13,19 @@ package errors
 
 // The [gofidential.GofidentialError] struct is the base for all errors in this package.
 //
-// Fields:
-//   - Code (string): A unique identifier for the error.
-//   - Message (string): A description explaining the issue.
-//   - Hint (string): A suggestion to guide the user toward a possible fix.
-//
 // Notes:
 //   - "Code" is always unique and begins with the module that issued the error,
 //     making troubleshooting easier.
 //   - "Code" follows an uppercase snake case format (e.g., "INVALID_ENV_DATA").
 type GofidentialError struct {
-	Code    string `json:"code"`
+	// A unique identifier for the error.
+	Code string `json:"code"`
+
+	// A description explaining the issue.
 	Message string `json:"message"`
-	Hint    string `json:"hint"`
+
+	// A suggestion to guide the user toward a possible fix.
+	Hint string `json:"hint"`
 }
 
 // Returns a string containing the value of the [gofidential.GofidentialError.Message]
