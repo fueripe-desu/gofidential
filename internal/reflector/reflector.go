@@ -171,8 +171,8 @@ func (r *reflector) AllFields() (map[string]any, error) {
 // Returns:
 //   - *reflector: A new instance of the reflector created with the provided struct.
 //   - error: An error describing why the reflector creation failed.
-func newReflector(data any) (*reflector, error) {
-	ptrval := reflect.ValueOf(data)
+func newReflector(s any) (*reflector, error) {
+	ptrval := reflect.ValueOf(s)
 
 	// Checks if data is nil.
 	if !ptrval.IsValid() {
