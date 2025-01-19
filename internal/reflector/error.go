@@ -10,10 +10,10 @@ import (
 
 const moduleIssuer string = "GoFidential/Reflector"
 
-func newDataIsNilError() *errors.GofidentialError {
+func newInvalidDataError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.DataIsNilCode,
+		Code:       errorCode.InvalidData,
 		Message:    "The 'data' parameter must not be nil.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -25,7 +25,7 @@ func newDataIsNilError() *errors.GofidentialError {
 func newDataIsNotPtrError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.DataIsNotPtrCode,
+		Code:       errorCode.DataIsNotPtr,
 		Message:    "The 'data' parameter must be a pointer.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -34,10 +34,10 @@ func newDataIsNotPtrError() *errors.GofidentialError {
 	}
 }
 
-func newDataIsNilPtrError() *errors.GofidentialError {
+func newNilDataPtrError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.DataIsNilPtrCode,
+		Code:       errorCode.NilDataPtr,
 		Message:    "The 'data' pointer must not be nil.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -46,10 +46,10 @@ func newDataIsNilPtrError() *errors.GofidentialError {
 	}
 }
 
-func newDataIsNotStructError() *errors.GofidentialError {
+func newInvalidStructPtrError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.DataIsNilPtrCode,
+		Code:       errorCode.InvalidStructPtr,
 		Message:    "The 'data' pointer must point to a valid struct.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -58,10 +58,10 @@ func newDataIsNotStructError() *errors.GofidentialError {
 	}
 }
 
-func newDuplicateKeyError(key string) *errors.GofidentialError {
+func newDuplicateKeysError(key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.DuplicateKeyCode,
+		Code:       errorCode.DuplicateKeys,
 		Message:    "Duplicate keys are not allowed.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -75,7 +75,7 @@ func newDuplicateKeyError(key string) *errors.GofidentialError {
 func newMissingFieldError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.MissingFieldCode,
+		Code:       errorCode.MissingField,
 		Message:    "The expected '" + field + "' field is missing.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -89,7 +89,7 @@ func newMissingFieldError(field string) *errors.GofidentialError {
 func newUnsupportedTypeError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.MissingFieldCode,
+		Code:       errorCode.MissingField,
 		Message:    "The '" + field + "' field has an unsupported type",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -103,7 +103,7 @@ func newUnsupportedTypeError(field string) *errors.GofidentialError {
 func newInvalidIntError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidIntCode,
+		Code:       errorCode.InvalidInt,
 		Message:    "The '" + field + "' field is not a valid int.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -117,7 +117,7 @@ func newInvalidIntError(field string) *errors.GofidentialError {
 func newInvalidUintError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidUintCode,
+		Code:       errorCode.InvalidUint,
 		Message:    "The '" + field + "' field is not a valid unsigned int.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -131,7 +131,7 @@ func newInvalidUintError(field string) *errors.GofidentialError {
 func newInvalidFloatError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidFloatCode,
+		Code:       errorCode.InvalidFloat,
 		Message:    "The '" + field + "' field is not a valid float",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -145,7 +145,7 @@ func newInvalidFloatError(field string) *errors.GofidentialError {
 func newInvalidComplexError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidComplexCode,
+		Code:       errorCode.InvalidComplex,
 		Message:    "The '" + field + "' field is not a valid complex number.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -159,7 +159,7 @@ func newInvalidComplexError(field string) *errors.GofidentialError {
 func newInvalidBoolError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidBoolCode,
+		Code:       errorCode.InvalidBool,
 		Message:    "The '" + field + "' field is not a valid boolean.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -173,7 +173,7 @@ func newInvalidBoolError(field string) *errors.GofidentialError {
 func newInvalidTimeError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidTimeCode,
+		Code:       errorCode.InvalidTime,
 		Message:    "The '" + field + "' field is not a valid time value.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -187,7 +187,7 @@ func newInvalidTimeError(field string) *errors.GofidentialError {
 func newUnsettableFieldError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidTimeCode,
+		Code:       errorCode.InvalidTime,
 		Message:    "The '" + field + "' field is not settable.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -201,7 +201,7 @@ func newUnsettableFieldError(field string) *errors.GofidentialError {
 func newUnexportedFieldError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidTimeCode,
+		Code:       errorCode.InvalidTime,
 		Message:    "The provided struct contains unexported fields.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
@@ -213,7 +213,7 @@ func newUnexportedFieldError() *errors.GofidentialError {
 func newInvalidEnvDataError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidEnvDataCode,
+		Code:       errorCode.InvalidEnvData,
 		Message:    "Failed to read env data. Data is invalid.",
 		Timestamp:  time.Now(),
 		StackTrace: debug.Stack(),
