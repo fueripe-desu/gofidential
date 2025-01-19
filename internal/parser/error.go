@@ -7,6 +7,16 @@ import (
 	errorCode "github.com/fueripe-desu/gofidential/errors/parser"
 )
 
+// The [parser.newMissingAssignmentError] function creates an error with the
+// code "MissingAssignment".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newMissingAssignmentError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.MissingAssignment,
@@ -15,6 +25,15 @@ func newMissingAssignmentError(line int, col int, key string) *errors.Gofidentia
 	}
 }
 
+// The [parser.newMissingKeyError] function creates an error with the
+// code "MissingKey".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newMissingKeyError(line int, col int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.MissingKey,
@@ -23,6 +42,16 @@ func newMissingKeyError(line int, col int) *errors.GofidentialError {
 	}
 }
 
+// The [parser.newMissingValueError] function creates an error with the
+// code "MissingValue".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newMissingValueError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.MissingValue,
@@ -31,6 +60,16 @@ func newMissingValueError(line int, col int, key string) *errors.GofidentialErro
 	}
 }
 
+// The [parser.newEmptyValueError] function creates an error with the
+// code "EmptyValue".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newEmptyValueError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.EmptyValue,
@@ -39,6 +78,16 @@ func newEmptyValueError(line int, col int, key string) *errors.GofidentialError 
 	}
 }
 
+// The [parser.newSingleQuotedValueError] function creates an error with the
+// code "SingleQuotedValue".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newSingleQuotedValueError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.SingleQuotedValue,
@@ -47,6 +96,16 @@ func newSingleQuotedValueError(line int, col int, key string) *errors.Gofidentia
 	}
 }
 
+// The [parser.newUnquotedValueError] function creates an error with the
+// code "UnquotedValue".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newUnquotedValueError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.UnquotedValue,
@@ -55,6 +114,16 @@ func newUnquotedValueError(line int, col int, key string) *errors.GofidentialErr
 	}
 }
 
+// The [parser.newUnterminatedQuotesError] function creates an error with the
+// code "UnterminatedQuotes".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newUnterminatedQuotesError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.UnterminatedQuotes,
@@ -63,6 +132,16 @@ func newUnterminatedQuotesError(line int, col int, key string) *errors.Gofidenti
 	}
 }
 
+// The [parser.newSpacedSeparatorError] function creates an error with the
+// code "SpacedSeparator".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newSpacedSeparatorError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.SpacedSeparator,
@@ -71,6 +150,14 @@ func newSpacedSeparatorError(line int, col int, key string) *errors.GofidentialE
 	}
 }
 
+// The [parser.newLeadingSpaceError] function creates an error with the
+// code "LeadingSpace".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newLeadingSpaceError(line int) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.LeadingSpace,
@@ -79,6 +166,17 @@ func newLeadingSpaceError(line int) *errors.GofidentialError {
 	}
 }
 
+// The [parser.newUnallowedEscapeError] function creates an error with the
+// code "UnallowedEscape".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//   - escape (string): The unallowed escape that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newUnallowedEscapeError(line int, col int, key string, escape string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.UnallowedEscape,
@@ -87,6 +185,16 @@ func newUnallowedEscapeError(line int, col int, key string, escape string) *erro
 	}
 }
 
+// The [parser.newLowercaseKeyError] function creates an error with the
+// code "LowercaseKey".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newLowercaseKeyError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.LowercaseKey,
@@ -95,6 +203,16 @@ func newLowercaseKeyError(line int, col int, key string) *errors.GofidentialErro
 	}
 }
 
+// The [parser.newNumericKeyCharsError] function creates an error with the
+// code "NumericKeyChars".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newNumericKeyCharsError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.NumericKeyChars,
@@ -103,6 +221,16 @@ func newNumericKeyCharsError(line int, col int, key string) *errors.GofidentialE
 	}
 }
 
+// The [parser.newLeadingUnderscoreError] function creates an error with the
+// code "LeadingUnderscore".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newLeadingUnderscoreError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.LeadingUnderscore,
@@ -111,6 +239,16 @@ func newLeadingUnderscoreError(line int, col int, key string) *errors.Gofidentia
 	}
 }
 
+// The [parser.newTrailingUnderscoreError] function creates an error with the
+// code "TrailingUnderscore".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newTrailingUnderscoreError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.TrailingUnderscore,
@@ -119,6 +257,16 @@ func newTrailingUnderscoreError(line int, col int, key string) *errors.Gofidenti
 	}
 }
 
+// The [parser.newInvalidKeyCharsError] function creates an error with the
+// code "InvalidKeyChars".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newInvalidKeyCharsError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.InvalidKeyChars,
@@ -127,6 +275,16 @@ func newInvalidKeyCharsError(line int, col int, key string) *errors.GofidentialE
 	}
 }
 
+// The [parser.newInlineCommentError] function creates an error with the
+// code "InlineComment".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newInlineCommentError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.InlineComment,
@@ -135,6 +293,16 @@ func newInlineCommentError(line int, col int, key string) *errors.GofidentialErr
 	}
 }
 
+// The [parser.newUnescapedQuoteCharError] function creates an error with the
+// code "UnescapedQuoteChar".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newUnescapedQuoteCharError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.UnescapedQuoteChar,
@@ -143,6 +311,16 @@ func newUnescapedQuoteCharError(line int, col int, key string) *errors.Gofidenti
 	}
 }
 
+// The [parser.newMultilineValueError] function creates an error with the
+// code "MultilineValue".
+//
+// Parameters:
+//   - line (int): The line where the error occured.
+//   - col (int): The column wherer the error occured.
+//   - key (string): The key that caused the error.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newMultilineValueError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.MultilineValue,
