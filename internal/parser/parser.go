@@ -1,3 +1,10 @@
+// Package parser provides functionality to parse a .env file's byte buffer
+// into a map of key-value pairs.
+//
+// The main component of this package is the [parser.parser] struct, which
+// handles the parsing process. The package exposes the [parser.Parse] function,
+// which is used to initiate the parsing and generate the resulting map of
+// key-value pairs.
 package parser
 
 import (
