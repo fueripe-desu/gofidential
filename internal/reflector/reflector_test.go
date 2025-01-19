@@ -19,12 +19,12 @@ func Test_newReflector(t *testing.T) {
 		{
 			name:        "data is nil",
 			data:        nil,
-			expectedErr: newInvalidDataError(),
+			expectedErr: newSIsNilError(),
 		},
 		{
 			name:        "data is not a pointer",
 			data:        1,
-			expectedErr: newDataIsNotPtrError(),
+			expectedErr: newSIsNotPtrError(),
 		},
 		{
 			name: "data is nil pointer",
@@ -32,7 +32,7 @@ func Test_newReflector(t *testing.T) {
 				var data *struct{} = nil
 				return data
 			}(),
-			expectedErr: newNilDataPtrError(),
+			expectedErr: newNilStructPtrError(),
 		},
 		{
 			name:        "data does not point to a struct",
@@ -871,13 +871,13 @@ func Test_Reflect(t *testing.T) {
 			name:        "should return an error if s is nil",
 			data:        map[string]string{},
 			s:           nil,
-			expectedErr: newInvalidDataError(),
+			expectedErr: newSIsNilError(),
 		},
 		{
 			name:        "should return an error if s is not a pointer",
 			data:        map[string]string{},
 			s:           1,
-			expectedErr: newDataIsNotPtrError(),
+			expectedErr: newSIsNotPtrError(),
 		},
 		{
 			name: "should return an error if s is a nil pointer",
@@ -886,7 +886,7 @@ func Test_Reflect(t *testing.T) {
 				var data *struct{} = nil
 				return data
 			}(),
-			expectedErr: newNilDataPtrError(),
+			expectedErr: newNilStructPtrError(),
 		},
 		{
 			name:        "should return an error if s does not point to a struct",
@@ -907,7 +907,7 @@ func Test_Reflect(t *testing.T) {
 				"VALUE":  "value 1",
 			},
 			s:           &(struct{ Value string }{}),
-			expectedErr: newDuplicateKeysError("Value"),
+			expectedErr: newDuplicateKeysError("VALUE", "VALUE_"),
 		},
 		{
 			name: "should return an error if s is missing a field",
