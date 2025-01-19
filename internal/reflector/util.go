@@ -5,6 +5,15 @@ import (
 	"unicode"
 )
 
+// The [reflector.upperToPascal] helper function converts a string from
+// uppercase snake case (used for .env keys) to Pascal case, which is
+// the convention for exported struct fields.
+//
+// Parameters:
+//   - v (string): The uppercase snake case string to be converted.
+//
+// Returns:
+//   - string: The converted string in Pascal case.
 func upperToPascal(v string) string {
 	var result strings.Builder
 

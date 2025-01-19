@@ -7,6 +7,11 @@ import (
 	errorCode "github.com/fueripe-desu/gofidential/errors/reflector"
 )
 
+// The [reflector.newSIsNilError] function creates an error with the
+// code "SIsNil".
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newSIsNilError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.SIsNil,
@@ -15,6 +20,11 @@ func newSIsNilError() *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newSIsNotPtrError] function creates an error with the
+// code "SIsNotPtr".
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newSIsNotPtrError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.SIsNotPtr,
@@ -23,6 +33,11 @@ func newSIsNotPtrError() *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newNilStructPtrError] function creates an error with the
+// code "NilStructPtr".
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newNilStructPtrError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.NilStructPtr,
@@ -31,6 +46,11 @@ func newNilStructPtrError() *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newInvalidStructPtrError] function creates an error with the
+// code "InvalidStructPtr".
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newInvalidStructPtrError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.InvalidStructPtr,
@@ -39,6 +59,15 @@ func newInvalidStructPtrError() *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newDuplicateKeysError] function creates an error with the
+// code "DuplicateKeys".
+//
+// Parameters:
+//   - key1 (string): The key that caused the conflict.
+//   - key2 (string): The existing key that conflicts with key1.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newDuplicateKeysError(key1 string, key2 string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.DuplicateKeys,
@@ -47,6 +76,14 @@ func newDuplicateKeysError(key1 string, key2 string) *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newMissingFieldError] function creates an error with the
+// code "MissingField".
+//
+// Parameters:
+//   - field (string): The expected field that is missing in the struct.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newMissingFieldError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.MissingField,
@@ -55,6 +92,14 @@ func newMissingFieldError(field string) *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newUnsupportedTypeError] function creates an error with the
+// code "UnsupportedType".
+//
+// Parameters:
+//   - field (string): The field that has an unsupported type in the struct.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newUnsupportedTypeError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.UnsupportedType,
@@ -63,6 +108,15 @@ func newUnsupportedTypeError(field string) *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newInvalidIntError] function creates an error with the
+// code "InvalidInt".
+//
+// Parameters:
+//   - key (string): The key in the .env file that contains an invalid
+//     integer value.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newInvalidIntError(key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.InvalidInt,
@@ -71,6 +125,15 @@ func newInvalidIntError(key string) *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newInvalidUintError] function creates an error with the
+// code "InvalidUint".
+//
+// Parameters:
+//   - key (string): The key in the .env file that contains an invalid
+//     usigned integer value.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newInvalidUintError(key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.InvalidUint,
@@ -79,6 +142,15 @@ func newInvalidUintError(key string) *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newInvalidFloatError] function creates an error with the
+// code "InvalidFloat".
+//
+// Parameters:
+//   - key (string): The key in the .env file that contains an invalid
+//     float value.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newInvalidFloatError(key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.InvalidFloat,
@@ -87,6 +159,15 @@ func newInvalidFloatError(key string) *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newInvalidComplexError] function creates an error with the
+// code "InvalidComplex".
+//
+// Parameters:
+//   - key (string): The key in the .env file that contains an invalid
+//     complex number value.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newInvalidComplexError(key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.InvalidComplex,
@@ -95,6 +176,15 @@ func newInvalidComplexError(key string) *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newInvalidBoolError] function creates an error with the
+// code "InvalidBool".
+//
+// Parameters:
+//   - key (string): The key in the .env file that contains an invalid
+//     bool value.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newInvalidBoolError(key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.InvalidBool,
@@ -103,6 +193,15 @@ func newInvalidBoolError(key string) *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newInvalidTimeError] function creates an error with the
+// code "InvalidTime".
+//
+// Parameters:
+//   - key (string): The key in the .env file that contains an invalid
+//     time value.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newInvalidTimeError(key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.InvalidTime,
@@ -111,6 +210,14 @@ func newInvalidTimeError(key string) *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newUnsettableFieldError] function creates an error with the
+// code "UnsettableField".
+//
+// Parameters:
+//   - field (string): The field that can not be set in the struct.
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newUnsettableFieldError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.UnsettableField,
@@ -119,6 +226,11 @@ func newUnsettableFieldError(field string) *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newUnexportedFieldError] function creates an error with the
+// code "UnexportedField".
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newUnexportedFieldError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.UnexportedField,
@@ -127,6 +239,11 @@ func newUnexportedFieldError() *errors.GofidentialError {
 	}
 }
 
+// The [reflector.newInvalidEnvDataError] function creates an error with the
+// code "InvalidEnvData".
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
 func newInvalidEnvDataError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.InvalidEnvData,
