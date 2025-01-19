@@ -1,18 +1,9 @@
 package errors
 
-import (
-	"reflect"
-	"time"
-)
-
 type GofidentialError struct {
-	Issuer     string            `json:"issuer"`
-	Code       string            `json:"code"`
-	Message    string            `json:"message"`
-	Timestamp  time.Time         `json:"timestamp"`
-	StackTrace []byte            `json:"stack_trace"`
-	Suggestion string            `json:"suggestion"`
-	Details    map[string]string `json:"details"`
+	Code    string `json:"code"`
+	Message string `json:"message"`
+	Hint    string `json:"hint"`
 }
 
 func (e *GofidentialError) Error() string {
@@ -20,9 +11,7 @@ func (e *GofidentialError) Error() string {
 }
 
 func (e *GofidentialError) Equal(other *GofidentialError) bool {
-	return e.Issuer == other.Issuer &&
-		e.Code == other.Code &&
+	return e.Code == other.Code &&
 		e.Message == other.Message &&
-		e.Suggestion == other.Suggestion &&
-		reflect.DeepEqual(e.Details, other.Details)
+		e.Hint == other.Hint
 }

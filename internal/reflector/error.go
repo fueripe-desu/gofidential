@@ -1,223 +1,136 @@
 package reflector
 
 import (
-	"runtime/debug"
-	"time"
+	"fmt"
 
 	"github.com/fueripe-desu/gofidential/errors"
 	errorCode "github.com/fueripe-desu/gofidential/errors/reflector"
 )
 
-const moduleIssuer string = "GoFidential/Reflector"
-
-func newInvalidDataError() *errors.GofidentialError {
+func newSIsNilError() *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidData,
-		Message:    "The 'data' parameter must not be nil.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Check if you are actually passing a pointer to the Load() function and not 'nil'.",
-		Details:    map[string]string{},
+		Code:    errorCode.SIsNil,
+		Message: "The parameter 's' must not be nil.",
+		Hint:    "Ensure that a valid struct pointer is passed as the 's' parameter to the Load() function.",
 	}
 }
 
-func newDataIsNotPtrError() *errors.GofidentialError {
+func newSIsNotPtrError() *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.DataIsNotPtr,
-		Message:    "The 'data' parameter must be a pointer.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Check if you are actually passing a pointer to the Load() function.",
-		Details:    map[string]string{},
+		Code:    errorCode.SIsNotPtr,
+		Message: "The parameter 's' must be a pointer.",
+		Hint:    "Ensure that a valid struct pointer is passed as the 's' parameter to the Load() function.",
 	}
 }
 
-func newNilDataPtrError() *errors.GofidentialError {
+func newNilStructPtrError() *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.NilDataPtr,
-		Message:    "The 'data' pointer must not be nil.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Check if you are passing a pointer to a valid struct to the the Load() function.",
-		Details:    map[string]string{},
+		Code:    errorCode.NilStructPtr,
+		Message: "The pointer passed to the 's' parameter must not point nil.",
+		Hint:    "Ensure that a valid struct pointer is passed as the 's' parameter to the Load() function.",
 	}
 }
 
 func newInvalidStructPtrError() *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidStructPtr,
-		Message:    "The 'data' pointer must point to a valid struct.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Check if you are passing a pointer to a valid struct to the the Load() function.",
-		Details:    map[string]string{},
+		Code:    errorCode.InvalidStructPtr,
+		Message: "The pointer passed to the 's' parameter must point to a valid struct.",
+		Hint:    "Ensure that a valid struct pointer is passed as the 's' parameter to the Load() function.",
 	}
 }
 
-func newDuplicateKeysError(key string) *errors.GofidentialError {
+func newDuplicateKeysError(key1 string, key2 string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.DuplicateKeys,
-		Message:    "Duplicate keys are not allowed.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "If you are using GoFidential v1, this error happened due to a bug. Please open an issue at github.com/fueripe-desu/gofidential",
-		Details: map[string]string{
-			"normalized_key": key,
-		},
+		Code:    errorCode.DuplicateKeys,
+		Message: fmt.Sprintf("The key '%s' conflicts with the key '%s'. Please use a different name.", key1, key2),
+		Hint:    "This is an internal error. If you can’t find a solution it, please open an issue at https://github.com/fueripe-desu/gofidential.",
 	}
 }
 
 func newMissingFieldError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.MissingField,
-		Message:    "The expected '" + field + "' field is missing.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Add the missing field, or remove the unused key from the .env file.",
-		Details: map[string]string{
-			"field": field,
-		},
+		Code:    errorCode.MissingField,
+		Message: fmt.Sprintf("The expected field '%s' is missing in the struct.", field),
+		Hint:    "Add the missing field in the struct, or remove the unused key from the .env file.",
 	}
 }
 
 func newUnsupportedTypeError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.MissingField,
-		Message:    "The '" + field + "' field has an unsupported type",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Change the type of the invalid field or remove it if unusued.",
-		Details: map[string]string{
-			"field": field,
-		},
+		Code:    errorCode.UnsupportedType,
+		Message: fmt.Sprintf("The field '%s' defined in the struct has an unsupported type.", field),
+		Hint:    "Check the type of the '%s' field and replace it with a supported type, or remove the field if it’s not required.",
 	}
 }
 
-func newInvalidIntError(field string) *errors.GofidentialError {
+func newInvalidIntError(key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidInt,
-		Message:    "The '" + field + "' field is not a valid int.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Change the value so it becomes a valid integer string.",
-		Details: map[string]string{
-			"field": field,
-		},
+		Code:    errorCode.InvalidInt,
+		Message: fmt.Sprintf("The key '%s' defined in the .env file does not contain a valid integer string.", key),
+		Hint:    "Ensure the value is a valid integer string. Examples: '22', '-13', '58'.",
 	}
 }
 
-func newInvalidUintError(field string) *errors.GofidentialError {
+func newInvalidUintError(key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidUint,
-		Message:    "The '" + field + "' field is not a valid unsigned int.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Change the value so it becomes a valid unsigned integer string.",
-		Details: map[string]string{
-			"field": field,
-		},
+		Code:    errorCode.InvalidUint,
+		Message: fmt.Sprintf("The key '%s' defined in the .env file does not contain a valid unsigned integer string.", key),
+		Hint:    "Ensure the value is a valid unsigned integer string. Examples: '95', '16', '868' (negative values are not allowed).",
 	}
 }
 
-func newInvalidFloatError(field string) *errors.GofidentialError {
+func newInvalidFloatError(key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidFloat,
-		Message:    "The '" + field + "' field is not a valid float",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Change the value so it becomes a valid float string.",
-		Details: map[string]string{
-			"field": field,
-		},
+		Code:    errorCode.InvalidFloat,
+		Message: fmt.Sprintf("The key '%s' defined in the .env file does not contain a valid float string.", key),
+		Hint:    "Ensure the value is a valid float string. Examples: '3.1415', '2.1', '-1.7'.",
 	}
 }
 
-func newInvalidComplexError(field string) *errors.GofidentialError {
+func newInvalidComplexError(key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidComplex,
-		Message:    "The '" + field + "' field is not a valid complex number.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Change the value so it becomes a valid complex number string.",
-		Details: map[string]string{
-			"field": field,
-		},
+		Code:    errorCode.InvalidComplex,
+		Message: fmt.Sprintf("The key '%s' defined in the .env file does not contain a valid complex number string.", key),
+		Hint:    "Ensure the value is a valid complex number string. Example: '3+4i' (real and imaginary parts, separated by a plus or minus sign).",
 	}
 }
 
-func newInvalidBoolError(field string) *errors.GofidentialError {
+func newInvalidBoolError(key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidBool,
-		Message:    "The '" + field + "' field is not a valid boolean.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Change the value so it becomes a valid boolean string.",
-		Details: map[string]string{
-			"field": field,
-		},
+		Code:    errorCode.InvalidBool,
+		Message: fmt.Sprintf("The key '%s' defined in the .env file does not contain a valid boolean string.", key),
+		Hint:    "Ensure the value is a valid boolean string. Examples: 'true' and 'false'.",
 	}
 }
 
-func newInvalidTimeError(field string) *errors.GofidentialError {
+func newInvalidTimeError(key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidTime,
-		Message:    "The '" + field + "' field is not a valid time value.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Change the value so it becomes a valid time value string.",
-		Details: map[string]string{
-			"field": field,
-		},
+		Code:    errorCode.InvalidTime,
+		Message: fmt.Sprintf("The key '%s' defined in the .env file does not contain a valid datetime string.", key),
+		Hint:    "Ensure the value is a valid datetime string. Example: '2023-01-18T15:04:05Z'.",
 	}
 }
 
 func newUnsettableFieldError(field string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidTime,
-		Message:    "The '" + field + "' field is not settable.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Check if you are passing a valid pointer to a struct.",
-		Details: map[string]string{
-			"field": field,
-		},
+		Code:    errorCode.UnsettableField,
+		Message: fmt.Sprintf("The field '%s' defined in the struct is not settable.", field),
+		Hint:    "This is an internal error. If you can’t find a solution it, please open an issue at https://github.com/fueripe-desu/gofidential.",
 	}
 }
 
 func newUnexportedFieldError() *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidTime,
-		Message:    "The provided struct contains unexported fields.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Check if all fields in the struct start with an uppercase letter.",
-		Details:    map[string]string{},
+		Code:    errorCode.UnexportedField,
+		Message: "The provided struct contains unexported fields.",
+		Hint:    "Ensure all fields in the struct start with an uppercase letter to make them exported.",
 	}
 }
 
 func newInvalidEnvDataError() *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidEnvData,
-		Message:    "Failed to read env data. Data is invalid.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "If this error happened, there is a bug in the code. Please open an issue at github.com/fueripe-desu/gofidential",
-		Details:    map[string]string{},
+		Code:    errorCode.InvalidEnvData,
+		Message: "Failed to read .env file data.",
+		Hint:    "This is an internal error. If you can’t find a solution it, please open an issue at https://github.com/fueripe-desu/gofidential.",
 	}
 }

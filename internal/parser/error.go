@@ -1,265 +1,152 @@
 package parser
 
 import (
-	"runtime/debug"
-	"strconv"
-	"time"
+	"fmt"
 
 	"github.com/fueripe-desu/gofidential/errors"
 	errorCode "github.com/fueripe-desu/gofidential/errors/parser"
 )
 
-const moduleIssuer string = "GoFidential/Parser"
-
-func newMissingAssignmentError(lineNumber int) *errors.GofidentialError {
+func newMissingAssignmentError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.MissingAssignment,
-		Message:    "Missing assignment operator.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Check if all lines have an assignment operator.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.MissingAssignment,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The key '%s' is missing the assignment operator.", line, col, key),
+		Hint:    "Add an assignment operator between the key and the value.",
 	}
 }
 
-func newMissingKeyError(lineNumber int) *errors.GofidentialError {
+func newMissingKeyError(line int, col int) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.MissingKey,
-		Message:    "Key is missing.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Check if the key is in the same line as the value.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.MissingKey,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: Key is missing.", line, col),
+		Hint:    "Ensure that the key is placed right before the assignment operator (=).",
 	}
 }
 
-func newMissingValueError(lineNumber int) *errors.GofidentialError {
+func newMissingValueError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.MissingValue,
-		Message:    "Value is missing.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Add a valid double-quoted value for the key.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.MissingValue,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The key '%s' is missing its value.", line, col, key),
+		Hint:    "Ensure that the value is placed right after the assignment operator (=).",
 	}
 }
 
-func newEmptyValueError(lineNumber int) *errors.GofidentialError {
+func newEmptyValueError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.EmptyValue,
-		Message:    "Value must not be empty.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Try adding content inside the value double quotes.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.EmptyValue,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The key '%s' has an empty value.", line, col, key),
+		Hint:    "If the key isn't needed, consider removing it.",
 	}
 }
 
-func newSingleQuotedValueError(lineNumber int) *errors.GofidentialError {
+func newSingleQuotedValueError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.SingleQuotedValue,
-		Message:    "Single quotes are not allowed.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Replace single quotes for double quotes.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.SingleQuotedValue,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The value of the key '%s' is single quoted.", line, col, key),
+		Hint:    "Use double quotes around the value instead of single quotes.",
 	}
 }
 
-func newUnquotedValueError(lineNumber int) *errors.GofidentialError {
+func newUnquotedValueError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.UnquotedValue,
-		Message:    "Value is not double quoted.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Place double quotes around the unquoted value.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.UnquotedValue,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The value of the key '%s' is unquoted.", line, col, key),
+		Hint:    "Use double quotes around the value instead of leaving it unquoted.",
 	}
 }
 
-func newUnterminatedQuotesError(lineNumber int) *errors.GofidentialError {
+func newUnterminatedQuotesError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.UnterminatedQuotes,
-		Message:    "Unterminated quote found.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Check if all values are opened and closed with double quotes correctly, or if there is an unescaped double quotes in their values.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.UnterminatedQuotes,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The value of the key '%s' is missing the closing double quotes.", line, col, key),
+		Hint:    "Make sure to add a closing double quote at the end of the value.",
 	}
 }
 
-func newSpacedSeparatorError(lineNumber int) *errors.GofidentialError {
+func newSpacedSeparatorError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.SpacedSeparator,
-		Message:    "Assignment operator must not have spaces around it.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Remove any trailing or leading spaces between the assignment operator and the key or value it operates on.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.SpacedSeparator,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The assignment operator of the key '%s' is spaced.", line, col, key),
+		Hint:    "Remove any spaces before or after the assignment operator.",
 	}
 }
 
-func newLeadingSpaceError(lineNumber int) *errors.GofidentialError {
+func newLeadingSpaceError(line int) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.LeadingSpace,
-		Message:    "Leading spaces before key are not allowed.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Remove leading spaces before the keys in the .env file.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.LeadingSpace,
+		Message: fmt.Sprintf("[Line: %d, Column: 0]: Leading spaces before the key are not allowed.", line),
+		Hint:    "Remove any leading spaces before the key.",
 	}
 }
 
-func newUnallowedEscapeError(lineNumber int, invalidEscape string) *errors.GofidentialError {
+func newUnallowedEscapeError(line int, col int, key string, escape string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.UnallowedEscape,
-		Message:    "Escape character is not allowed.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Remove the unallowed escape character.",
-		Details: map[string]string{
-			"escape_char": invalidEscape,
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.UnallowedEscape,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The key '%s' contains the invalid escape character '%s' in its value.", line, col, key, escape),
+		Hint:    "Consider removing the invalid escape character or using an allowed one.",
 	}
 }
 
-func newLowercaseKeyError(lineNumber int) *errors.GofidentialError {
+func newLowercaseKeyError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.LowercaseKey,
-		Message:    "Key must not be lowercase.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Replace lowercase characters by uppercase characters.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.LowercaseKey,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The key '%s' contains lowercase characters, which are not allowed.", line, col, key),
+		Hint:    "Please use only uppercase characters in the key.",
 	}
 }
 
-func newNumericKeyCharsError(lineNumber int) *errors.GofidentialError {
+func newNumericKeyCharsError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.NumericKeyChars,
-		Message:    "Key must not contain numbers.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Remove any numbers from the key.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.NumericKeyChars,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The key '%s' contains numeric characters, which are not allowed.", line, col, key),
+		Hint:    "Remove all numbers from the key.",
 	}
 }
 
-func newLeadingUnderscoreError(lineNumber int) *errors.GofidentialError {
+func newLeadingUnderscoreError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.LeadingUnderscore,
-		Message:    "Key must not start with a underscore.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Remove underscores in the beginning of the key name.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.LeadingUnderscore,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The key '%s' has leading underscores, which are not allowed.", line, col, key),
+		Hint:    "Remove underscores in the beginning of the key.",
 	}
 }
 
-func newTrailingUnderscoreError(lineNumber int) *errors.GofidentialError {
+func newTrailingUnderscoreError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.TrailingUnderscore,
-		Message:    "Key must not end with an underscore.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Remove underscores in the end of the key name.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.TrailingUnderscore,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The key '%s' has trailing underscores, which are not allowed.", line, col, key),
+		Hint:    "Remove underscores in the end of the key.",
 	}
 }
 
-func newInvalidKeyCharsError(lineNumber int) *errors.GofidentialError {
+func newInvalidKeyCharsError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.InvalidKeyChars,
-		Message:    "Key is not alphanumeric.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Rename the key so it has only numbers (0-9) and uppercase letters (A-Z).",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.InvalidKeyChars,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The key '%s' contains invalid characters.", line, col, key),
+		Hint:    "Rename the key to contain only uppercase letters (A-Z) and underscores (_).",
 	}
 }
 
-func newInlineCommentError(lineNumber int) *errors.GofidentialError {
+func newInlineCommentError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.InlineComment,
-		Message:    "Inline comments are not allowed.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Move inline comments to their own lines, instead of placing them in the same line as the key-value pair, in the .env file.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.InlineComment,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The key '%s' contains an inline comment.", line, col, key),
+		Hint:    "Move comments to their own lines, instead of placing them in the same line as the key-value pair.",
 	}
 }
 
-func newUnescapedQuoteCharError(lineNumber int) *errors.GofidentialError {
+func newUnescapedQuoteCharError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.UnescapedQuoteChar,
-		Message:    "Unescaped quote found.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Maybe you forgot to escape the double quotes character?",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.UnescapedQuoteChar,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The value of the key '%s' contains unescaped double quotes.", line, col, key),
+		Hint:    "Maybe you forgot to escape the double quotes character?",
 	}
 }
 
-func newMultilineValueError(lineNumber int) *errors.GofidentialError {
+func newMultilineValueError(line int, col int, key string) *errors.GofidentialError {
 	return &errors.GofidentialError{
-		Issuer:     moduleIssuer,
-		Code:       errorCode.MultilineValue,
-		Message:    "Multiline values are not allowed.",
-		Timestamp:  time.Now(),
-		StackTrace: debug.Stack(),
-		Suggestion: "Try replacing multiline values by a single-line value, or use the \\n escape character to indicate a line break.",
-		Details: map[string]string{
-			"line_number": strconv.Itoa(lineNumber),
-		},
+		Code:    errorCode.MultilineValue,
+		Message: fmt.Sprintf("[Line: %d, Column: %d]: The key '%s' contains a multi-line value", line, col, key),
+		Hint:    "Replace multi-line values by a single-line value, and consider using the \\n escape character for line breaks.",
 	}
 }

@@ -2,16 +2,16 @@ package reflector
 
 const (
 	// Occurs when the 'data' parameter is nil.
-	InvalidData string = "REFLECTOR_INVALID_DATA"
+	SIsNil string = "REFLECTOR_S_IS_NIL"
+
+	// Occurs when the provided 'data' parameter is not a pointer.
+	SIsNotPtr string = "REFLECTOR_S_IS_NOT_PTR"
+
+	// Occurs when the provided 'data' parameter is a nil pointer.
+	NilStructPtr string = "REFLECTOR_NIL_STRUCT_PTR"
 
 	// Occurs when the .env file data is not passed correctly.
 	InvalidEnvData string = "REFLECTOR_INVALID_ENV_DATA"
-
-	// Occurs when the provided 'data' parameter is not a pointer.
-	DataIsNotPtr string = "REFLECTOR_DATA_IS_NOT_PTR"
-
-	// Occurs when the provided 'data' parameter is a nil pointer.
-	NilDataPtr string = "REFLECTOR_NIL_DATA_PTR"
 
 	// Occurs when the provided 'data' pointer does not point to a struct.
 	InvalidStructPtr string = "REFLECTOR_INVALID_STRUCT_PTR"
