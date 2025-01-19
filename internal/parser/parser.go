@@ -69,7 +69,7 @@ func (p *parser) Parse() (map[string]string, error) {
 			}
 
 			if b == '\'' {
-				return nil, newSingleQuotesError(p.lineNumber)
+				return nil, newSingleQuotedValueError(p.lineNumber)
 			}
 
 			if b != '"' {
@@ -79,7 +79,7 @@ func (p *parser) Parse() (map[string]string, error) {
 			p.state = InsideQuotes
 		} else if p.state == InsideQuotes {
 			if !p.isEscape && p.isEndOfLine(b) {
-				return nil, newUnterminatedQuoteError(p.lineNumber)
+				return nil, newUnterminatedQuotesError(p.lineNumber)
 			}
 
 			if p.isEscape {
@@ -126,7 +126,7 @@ func (p *parser) Parse() (map[string]string, error) {
 			if b == '#' {
 				return nil, newInlineCommentError(p.lineNumber)
 			} else if b != ' ' {
-				return nil, newUnescapedQuoteError(p.lineNumber)
+				return nil, newUnescapedQuoteCharError(p.lineNumber)
 			}
 		}
 
@@ -154,7 +154,7 @@ func (p *parser) handleParsingKey(b byte) error {
 	}
 
 	if b >= '0' && b <= '9' {
-		return newNumberKeyError(p.lineNumber)
+		return newNumericKeyCharsError(p.lineNumber)
 	}
 
 	if b == '"' {
