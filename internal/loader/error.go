@@ -5,6 +5,8 @@ import (
 	errorCode "github.com/fueripe-desu/gofidential/errors/loader"
 )
 
+// The [loader.newMissingNameError] function creates an error with the
+// code "MissingName".
 func newMissingNameError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.MissingName,
@@ -13,6 +15,8 @@ func newMissingNameError() *errors.GofidentialError {
 	}
 }
 
+// The [loader.newInvalidNameError] function creates an error with the
+// code "InvalidName".
 func newInvalidNameError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.InvalidName,
@@ -21,6 +25,8 @@ func newInvalidNameError() *errors.GofidentialError {
 	}
 }
 
+// The [loader.newUnderscoreOnlyNameError] function creates an error with the
+// code "UnderscoreOnlyName".
 func newUnderscoreOnlyNameError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.UnderscoreOnlyName,
@@ -29,6 +35,8 @@ func newUnderscoreOnlyNameError() *errors.GofidentialError {
 	}
 }
 
+// The [loader.newTrailingUnderscoreError] function creates an error with the
+// code "TrailingUnderscore".
 func newTrailingUnderscoreError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.TrailingUnderscore,
@@ -37,6 +45,8 @@ func newTrailingUnderscoreError() *errors.GofidentialError {
 	}
 }
 
+// The [loader.newLeadingUnderscoreError] function creates an error with the
+// code "LeadingUnderscore".
 func newLeadingUnderscoreError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.LeadingUnderscore,
@@ -45,6 +55,8 @@ func newLeadingUnderscoreError() *errors.GofidentialError {
 	}
 }
 
+// The [loader.newInexistentDirError] function creates an error with the
+// code "InexistentDir".
 func newInexistentDirError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.InexistentDir,
@@ -53,6 +65,8 @@ func newInexistentDirError() *errors.GofidentialError {
 	}
 }
 
+// The [loader.newFailedToReadDirError] function creates an error with the
+// code "FailedToReadDir".
 func newFailedToReadDirError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.FailedToReadDir,
@@ -61,6 +75,8 @@ func newFailedToReadDirError() *errors.GofidentialError {
 	}
 }
 
+// The [loader.newFailedToReadEnvError] function creates an error with the
+// code "FailedToReadEnv".
 func newFailedToReadEnvError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.FailedToReadEnv,
@@ -69,6 +85,8 @@ func newFailedToReadEnvError() *errors.GofidentialError {
 	}
 }
 
+// The [loader.newPathIsNotDirError] function creates an error with the
+// code "PathIsNotDir".
 func newPathIsNotDirError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.PathIsNotDir,
@@ -77,6 +95,8 @@ func newPathIsNotDirError() *errors.GofidentialError {
 	}
 }
 
+// The [loader.newPathIsNotFileError] function creates an error with the
+// code "PathIsNotFile".
 func newPathIsNotFileError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.PathIsNotFile,
@@ -85,6 +105,8 @@ func newPathIsNotFileError() *errors.GofidentialError {
 	}
 }
 
+// The [loader.newEnvNotFoundError] function creates an error with the
+// code "EnvNotFound".
 func newEnvNotFoundError() *errors.GofidentialError {
 	return &errors.GofidentialError{
 		Code:    errorCode.EnvNotFound,

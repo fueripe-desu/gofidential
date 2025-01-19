@@ -6,6 +6,26 @@ import (
 	"strings"
 )
 
+// The [loader.Load] function loads the specified .env file into memory and
+// returns a buffer containing the file's bytes.
+//
+// Parameters:
+//   - name (string): The name of the environment. This field is required.
+//   - overridePath (string): An optional custom directory path to look for the .env file.
+//   - ignoreFilename (bool): Determines the naming convention for the .env file.
+//     If true, the filename will always be ".env". If false, the filename will include
+//     the environment name (e.g., "dev.env", "test.env", "prod.env").
+//
+// Constraints:
+//   - The "name" parameter must not be empty.
+//   - The "name" parameter must contain only lowercase letters and underscores.
+//   - The "name" parameter must not have leading or trailing underscores.
+//   - The "name" parameter must not consist solely of underscores.
+//   - If specified, the "overridePath" parameter must be a valid directory path
+//     (not a filepath).
+//
+// Notes:
+//   - The "overridePath" and "ignoreFilename" parameters are optional.
 func Load(name string, overridePath string, ignoreFilename bool) (bytes.Buffer, error) {
 	// Must be trimmed to pass subsequent error checks.
 	name = strings.TrimSpace(name)
