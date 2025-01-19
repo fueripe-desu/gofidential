@@ -134,12 +134,12 @@ func newReflector(data any) (*reflector, error) {
 
 	// Checks if data is nil.
 	if !ptrval.IsValid() {
-		return nil, newInvalidDataError()
+		return nil, newSIsNilError()
 	}
 
 	// Check if data is not a pointer.
 	if ptrval.Kind() != reflect.Pointer {
-		return nil, newDataIsNotPtrError()
+		return nil, newSIsNotPtrError()
 	}
 
 	// Dereference pointer.
@@ -147,7 +147,7 @@ func newReflector(data any) (*reflector, error) {
 
 	// Check if the data pointer value is not nil.
 	if !ptrval.IsValid() {
-		return nil, newNilDataPtrError()
+		return nil, newNilStructPtrError()
 	}
 
 	// Check if the data pointer value is not a struct.
@@ -178,12 +178,13 @@ func Reflect(data map[string]string, s any) error {
 	}
 
 	newData := map[string]string{}
+	originalKey := map[string]string{}
 
 	for k, v := range data {
 		newKey := upperToPascal(k)
 
 		if _, ok := newData[newKey]; ok {
-			return newDuplicateKeysError(newKey)
+			return newDuplicateKeysError(k, originalKey[newKey])
 		}
 
 		if _, ok := fields[newKey]; !ok {
@@ -191,6 +192,7 @@ func Reflect(data map[string]string, s any) error {
 		}
 
 		newData[newKey] = v
+		originalKey[newKey] = k
 	}
 
 	for k, v := range newData {
