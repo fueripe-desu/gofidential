@@ -28,7 +28,7 @@ type reflector struct {
 //   - value (string): The value to assign to the field.
 //
 // Returns:
-//   - error: An error describing why the field could not be set.
+//   - error: An error describing why the field could not be set, or nil if the operation was successful.
 func (r *reflector) SetField(name string, value string) error {
 	field := r.ptrval.FieldByName(name)
 
@@ -130,7 +130,8 @@ func (r *reflector) SetField(name string, value string) error {
 // Returns:
 //   - map[string]any: A map containing field names as keys and their corresponding
 //     values as the associated values.
-//   - error: An error describing why the field information could not be retrieved.
+//   - error: An error describing why the field information could not be retrieved,
+//     or nil if the operation was successful.
 //
 // Notes:
 //   - This method will return an error if the target struct contains unexported
@@ -167,7 +168,8 @@ func (r *reflector) AllFields() (map[string]any, error) {
 //
 // Returns:
 //   - *reflector: A new instance of the reflector created with the provided struct.
-//   - error: An error describing why the reflector creation failed.
+//   - error: An error describing why the reflector creation failed, or nil if the
+//     operation was successful.
 func newReflector(s any) (*reflector, error) {
 	ptrval := reflect.ValueOf(s)
 
@@ -208,7 +210,8 @@ func newReflector(s any) (*reflector, error) {
 //   - s (any): The struct pointer that will be populated with data from the map.
 //
 // Returns:
-//   - error: An error describing why the reflection process failed.
+//   - error: An error describing why the reflection process failed, or nil if the operation
+//     was successful.
 func Reflect(data map[string]string, s any) error {
 	if data == nil {
 		return newInvalidEnvDataError()

@@ -48,7 +48,7 @@ type parser struct {
 //
 // Returns:
 //   - map[string]string: A map containing the parsed key-value pairs from the .env file.
-//   - error: An error indicating why the parsing process failed.
+//   - error: An error indicating why the parsing process failed, or nil if the operation was successful.
 func (p *parser) Parse() (map[string]string, error) {
 	parsed := map[string]string{}
 
@@ -178,7 +178,8 @@ func (p *parser) Parse() (map[string]string, error) {
 //     buffer, independent of line and column.
 //
 // Returns:
-//   - error: An error explaining why processing the current key byte failed.
+//   - error: An error explaining why processing the current key byte failed, or
+//     nil if the operation was successful.
 func (p *parser) handleParsingKey(b byte, globalIndex int) error {
 	if b == ' ' {
 		p.hasPrecedingSpace = true
@@ -308,7 +309,8 @@ func (p *parser) nextLine() {
 //
 // Returns:
 //   - map[string]string: A map containing the parsed key-value pairs from the .env file.
-//   - error: An error indicating why the parsing process failed.
+//   - error: An error indicating why the parsing process failed, or nil if the operation
+//     was successful.
 //
 // Notes:
 //   - This function normalizes new line characters in the buffer before storing them.

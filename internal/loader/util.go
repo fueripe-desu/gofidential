@@ -48,7 +48,8 @@ func isUnderscore(v string) bool {
 //
 // Returns:
 //   - error: Returns an error if the input path is not a valid directory
-//     or if there are permission issues accessing the path.
+//     or if there are permission issues accessing the path, or nil if the operation
+//     was successful.
 //
 // Notes:
 //
@@ -84,7 +85,8 @@ func isValidDir(path string) error {
 //
 // Returns:
 //   - error: Returns an error if the input path is not a valid file or
-//     if there are permission issues accessing the file.
+//     if there are permission issues accessing the file, or nil if the
+//     operation was successful.
 //
 // Notes:
 //   - If the application lacks permission to read the file, an error may be
@@ -115,7 +117,8 @@ func fileExists(path string) (bool, error) {
 //
 // Returns:
 //   - error: Returns an error if the input path is not a valid file or
-//     if there are permission issues accessing the file.
+//     if there are permission issues accessing the file, or nil if the operation
+//     was successful.
 //
 // Notes:
 //   - If the application lacks permission to read the file, an error may

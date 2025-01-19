@@ -69,7 +69,8 @@ import (
 //   - env (Environment): The environment configuration.
 //
 // Returns:
-//   - error: An error describing why the application failed to load the .env file.
+//   - error: An error describing why the application failed to load the .env file, or
+//     nil if the operation was successful.
 //
 // Constraints:
 //   - "s" must not be nil.

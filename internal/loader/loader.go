@@ -23,6 +23,11 @@ import (
 //     If true, the filename will always be ".env". If false, the filename will include
 //     the environment name (e.g., "dev.env", "test.env", "prod.env").
 //
+// Returns:
+//   - bytes.Buffer: The loaded file's byte buffer.
+//   - error: An error explaning why the loading process failed, or nil if the operation was
+//     successful.
+//
 // Constraints:
 //   - The "name" parameter must not be empty.
 //   - The "name" parameter must contain only lowercase letters and underscores.
