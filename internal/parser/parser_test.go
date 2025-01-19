@@ -88,12 +88,12 @@ func Test_Parse(t *testing.T) {
 		{
 			name:        "should return an error if the value open quotes is a single quote",
 			fixtureName: "open_single_quoted_value.env",
-			expectedErr: newSingleQuotesError(2),
+			expectedErr: newSingleQuotedValueError(2),
 		},
 		{
 			name:        "should return an error if the value close quotes is a single quote",
 			fixtureName: "close_single_quoted_value.env",
-			expectedErr: newUnterminatedQuoteError(2),
+			expectedErr: newUnterminatedQuotesError(2),
 		},
 		{
 			name:        "should return an error if the value is partially unquoted",
@@ -108,7 +108,7 @@ func Test_Parse(t *testing.T) {
 		{
 			name:        "should return an error if the value has unterminated quotes",
 			fixtureName: "unterminated_quotes.env",
-			expectedErr: newUnterminatedQuoteError(2),
+			expectedErr: newUnterminatedQuotesError(2),
 		},
 		{
 			name:        "should return an error if the value is empty",
@@ -133,12 +133,12 @@ func Test_Parse(t *testing.T) {
 		{
 			name:        "should return an error if the key starts with a number",
 			fixtureName: "key_starts_with_num.env",
-			expectedErr: newNumberKeyError(2),
+			expectedErr: newNumericKeyCharsError(2),
 		},
 		{
 			name:        "should return an error if the key contains any numbers",
 			fixtureName: "key_contains_numbers.env",
-			expectedErr: newNumberKeyError(2),
+			expectedErr: newNumericKeyCharsError(2),
 		},
 		{
 			name:        "should return an error if the key has a leading underscore",
