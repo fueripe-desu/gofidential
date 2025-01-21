@@ -1,30 +1,186 @@
+// Package reflector provides the [reflector.reflector] struct, which serves as
+// a wrapper around a struct pointer and enables reflection-based operations on
+// the struct.
+//
+// The package exposes the [reflector.Reflect] function, which populates a struct
+// pointer with data from a map of key-value pairs.
 package reflector
 
-import "reflect"
+import (
+	"reflect"
+	"strconv"
+	"time"
+)
 
-type Reflector struct {
+// The [reflector.reflector] struct wraps around a struct pointer and provides
+// reflection-based operations that can be performed on the struct. For example,
+// it allows listing all field names and values or assigning a value to a specific field.
+type reflector struct {
+	// The reflection of the struct pointer, used to access and manipulate the fields of the struct.
 	ptrval reflect.Value
 }
 
-func (r *Reflector) IsEmpty() bool {
-	return r.ptrval.NumField() == 0
+// The [reflector.reflector.SetField] method sets a specific field
+// in the struct that the reflector is pointing to with the provided value.
+//
+// Parameters:
+//   - name (string): The name of the field to be set.
+//   - value (string): The value to assign to the field.
+//
+// Returns:
+//   - error: An error describing why the field could not be set, or nil if the operation was successful.
+func (r *reflector) SetField(name string, value string) error {
+	field := r.ptrval.FieldByName(name)
+
+	if !field.IsValid() {
+		return newMissingFieldError(name)
+	}
+
+	if !field.CanSet() {
+		return newUnsettableFieldError(name)
+	}
+
+	fieldType := field.Type()
+
+	switch fieldType.Kind() {
+	case reflect.String:
+		field.SetString(value)
+	case reflect.Int:
+		fallthrough
+	case reflect.Int8:
+		fallthrough
+	case reflect.Int16:
+		fallthrough
+	case reflect.Int32:
+		fallthrough
+	case reflect.Int64:
+		intVal, err := strconv.ParseInt(value, 10, 64)
+
+		if err != nil {
+			return newInvalidIntError(name)
+		}
+
+		field.SetInt(intVal)
+	case reflect.Uint:
+		fallthrough
+	case reflect.Uint8:
+		fallthrough
+	case reflect.Uint16:
+		fallthrough
+	case reflect.Uint32:
+		fallthrough
+	case reflect.Uint64:
+		uintVal, err := strconv.ParseUint(value, 10, 64)
+
+		if err != nil {
+			return newInvalidUintError(name)
+		}
+
+		field.SetUint(uintVal)
+	case reflect.Float32:
+		fallthrough
+	case reflect.Float64:
+		floatVal, err := strconv.ParseFloat(value, 64)
+
+		if err != nil {
+			return newInvalidFloatError(name)
+		}
+
+		field.SetFloat(floatVal)
+	case reflect.Complex64:
+		fallthrough
+	case reflect.Complex128:
+		complexVal, err := strconv.ParseComplex(value, 128)
+
+		if err != nil {
+			return newInvalidComplexError(name)
+		}
+
+		field.SetComplex(complexVal)
+	case reflect.Bool:
+		boolVal, err := strconv.ParseBool(value)
+
+		if err != nil {
+			return newInvalidBoolError(name)
+		}
+
+		field.SetBool(boolVal)
+	case reflect.Struct:
+		if fieldType == reflect.TypeOf(time.Time{}) {
+			parsedTime, err := time.Parse(time.RFC3339Nano, value)
+			if err != nil {
+				return newInvalidTimeError(name)
+			}
+
+			field.Set(reflect.ValueOf(parsedTime))
+			break
+		}
+
+		fallthrough
+	default:
+		return newUnsupportedTypeError(name)
+	}
+
+	return nil
 }
 
-func (r *Reflector) FieldCount() int {
-	return r.ptrval.NumField()
+// The [reflector.reflector.AllFields] method returns a map of all fields and
+// their corresponding values from the struct the reflector is pointing to.
+//
+// Returns:
+//   - map[string]any: A map containing field names as keys and their corresponding
+//     values as the associated values.
+//   - error: An error describing why the field information could not be retrieved,
+//     or nil if the operation was successful.
+//
+// Notes:
+//   - This method will return an error if the target struct contains unexported
+//     fields, as they cannot be accessed via reflection.
+func (r *reflector) AllFields() (map[string]any, error) {
+	// Get the struct type
+	typ := r.ptrval.Type()
+
+	// Get the reflect.Value of the struct
+	val := r.ptrval
+
+	fields := map[string]any{}
+
+	for i := 0; i < typ.NumField(); i++ {
+		// Get field metadata
+		field := typ.Field(i)
+
+		if !field.IsExported() {
+			return nil, newUnexportedFieldError()
+		}
+
+		value := val.Field(i)
+		fields[field.Name] = value.Interface()
+	}
+
+	return fields, nil
 }
 
-func New(data any) (*Reflector, error) {
-	ptrval := reflect.ValueOf(data)
+// The [reflector.newReflector] function creates a new instance of the reflector
+// using the provided struct pointer.
+//
+// Parameters:
+//   - s (any): The struct pointer to be used for creating the reflector.
+//
+// Returns:
+//   - *reflector: A new instance of the reflector created with the provided struct.
+//   - error: An error describing why the reflector creation failed, or nil if the
+//     operation was successful.
+func newReflector(s any) (*reflector, error) {
+	ptrval := reflect.ValueOf(s)
 
 	// Checks if data is nil.
 	if !ptrval.IsValid() {
-		return nil, newDataIsNilError()
+		return nil, newSIsNilError()
 	}
 
 	// Check if data is not a pointer.
 	if ptrval.Kind() != reflect.Pointer {
-		return nil, newDataIsNotPtrError()
+		return nil, newSIsNotPtrError()
 	}
 
 	// Dereference pointer.
@@ -32,15 +188,70 @@ func New(data any) (*Reflector, error) {
 
 	// Check if the data pointer value is not nil.
 	if !ptrval.IsValid() {
-		return nil, newDataIsNilPtrError()
+		return nil, newNilStructPtrError()
 	}
 
 	// Check if the data pointer value is not a struct.
 	if ptrval.Kind() != reflect.Struct {
-		return nil, newDataIsNotStructError()
+		return nil, newInvalidStructPtrError()
 	}
 
-	return &Reflector{
+	return &reflector{
 		ptrval: ptrval,
 	}, nil
+}
+
+// The [reflector.Reflect] function takes a map of key-value pairs generated by
+// the parser and populates the provided struct pointer with corresponding data
+// by performing reflection.
+//
+// Parameters:
+//   - data (map[string]string): The map of key-value pairs to populate the struct with.
+//   - s (any): The struct pointer that will be populated with data from the map.
+//
+// Returns:
+//   - error: An error describing why the reflection process failed, or nil if the operation
+//     was successful.
+func Reflect(data map[string]string, s any) error {
+	if data == nil {
+		return newInvalidEnvDataError()
+	}
+
+	r, err := newReflector(s)
+
+	if err != nil {
+		return err
+	}
+
+	fields, err := r.AllFields()
+
+	if err != nil {
+		return err
+	}
+
+	newData := map[string]string{}
+	originalKey := map[string]string{}
+
+	for k, v := range data {
+		newKey := upperToPascal(k)
+
+		if _, ok := newData[newKey]; ok {
+			return newDuplicateKeysError(k, originalKey[newKey])
+		}
+
+		if _, ok := fields[newKey]; !ok {
+			return newMissingFieldError(newKey)
+		}
+
+		newData[newKey] = v
+		originalKey[newKey] = k
+	}
+
+	for k, v := range newData {
+		if err := r.SetField(k, v); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
