@@ -13,10 +13,6 @@ GoFidential is designed to simplify how your applications handle environment var
 - [Issues](#issues)  
 - [Show Your Support](#show-your-support)
 
-## Getting Started
-
-This section is currently being worked on...
-
 ## Features
 - ⚙️ **Environment-Aware:** Automatically adapts to different environments (development, staging, production).
 - 🛠 **Highly Customizable:** Offers extensive configuration options to fit your workflow.
@@ -30,17 +26,146 @@ This section is currently being worked on...
 ## Why GoFidential?
 Managing environment variables and secrets shouldn't be a hassle. That is precisely why GoFidential was created, it addresses the shortcomings of existing solutions, providing a more intuitive and flexible way to load secrets while maintaining minimal overhead.
 
-## Instalation
-GoFidential is not yet published on any package registry. To get started, simply clone the GitHub repository and integrate it directly into your project.
+---
 
-1. Clone the repository:
+## Getting Started
+
+### Installation
+
+To install **GoFidential**, ensure you have Go 1.18 or later installed.
+
+#### Step 1: Initialize a Go Module (if needed)
+
+If your project doesn't use Go modules yet, initialize it:
 
 ```bash
-git clone https://github.com/yourusername/gofidential.git
+go mod init <your-module-name>
 ```
 
-2. Import the package into your Go project.
-3. Follow the configuration instructions in the documentation to start using GoFidential to load your secrets seamlessly.
+Replace `<your-module-name>` with your project or module name, e.g.,:
+
+```bash
+go mod init github.com/yourusername/myproject
+```
+
+#### Step 2: Install GoFidential
+
+Add **GoFidential** to your project:
+
+```bash
+go get github.com/fueripe-desu/gofidential
+```
+
+This command downloads the package and updates your `go.mod` file.
+
+### Basic Usage
+
+1. **Import GoFidential**:
+
+```go
+import gf "github.com/fueripe-desu/gofidential"
+```
+
+2. **Create a `.env` file**:
+
+Use a file named according to your environment, e.g., `prod.env`:
+
+```
+APP_NAME="MyApp"
+VERSION="1"
+DEBUG="true"
+ENVIRONMENT="production"
+```
+
+3. **Define a struct**:
+
+The struct must use **PascalCase** field names matching the `.env` keys:
+
+```go
+type Secrets struct {
+  AppName     string
+  Version     int
+  Debug       bool
+  Environment string
+}
+```
+
+4. **Set up the environment**:
+
+Create an instance of the `Environment` struct:
+
+```go
+// Name makes the application look for the `prod.env` file.
+env := gf.Environment{Name: "prod"}
+```
+
+5. **Create a struct instance**:
+
+Initialize an empty struct to hold the `.env` data:
+
+```go
+s := Secrets{}
+```
+
+6. **Load the environment file**:
+
+Populate the struct with `.env` data:
+
+```go
+err := gf.Load(&s, env)
+if err != nil {
+  log.Fatal(err)
+}
+```
+
+### Complete Example
+
+```go
+package main
+
+import (
+  "fmt"
+  "log"
+
+  gf "github.com/fueripe-desu/gofidential"
+)
+
+type Secrets struct {
+  AppName     string
+  Version     int
+  Debug       bool
+  Environment string
+}
+
+func main() {
+  env := gf.Environment{Name: "prod"}
+  s := Secrets{}
+
+  err := gf.Load(&s, env)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  fmt.Printf("App name: %v\n", s.AppName)
+  fmt.Printf("Version: %v\n", s.Version)
+  fmt.Printf("Debug: %v\n", s.Debug)
+  fmt.Printf("Environment: %v\n", s.Environment)
+}
+```
+
+### Need More Examples?
+
+Check the `examples/` folder in the project repository for additional usage scenarios.
+
+### Having Trouble?
+
+Refer to the [Troubleshooting Guide](./TROUBLESHOOT.md) for detailed solutions to common errors.
+
+### GoFidential Standard v1.0.0 (GFSv1)
+
+Learn about the recommended `.env` file conventions in the [GFS documentation](./GFS.md).
+
+---
 
 ## Contributing
 We welcome contributions to GoFidential! Whether you're fixing a bug, adding a feature, or improving documentation, your help is greatly appreciated.
