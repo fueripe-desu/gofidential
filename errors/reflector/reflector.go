@@ -10,11 +10,11 @@ const (
 	// Occurs when the provided 'data' parameter is a nil pointer.
 	NilStructPtr string = "REFLECTOR_NIL_STRUCT_PTR"
 
-	// Occurs when the .env file data is not passed correctly.
-	InvalidEnvData string = "REFLECTOR_INVALID_ENV_DATA"
-
 	// Occurs when the provided 'data' pointer does not point to a struct.
 	InvalidStructPtr string = "REFLECTOR_INVALID_STRUCT_PTR"
+
+	// Occurs when the .env file data is not passed correctly.
+	InvalidEnvData string = "REFLECTOR_INVALID_ENV_DATA"
 
 	// Occurs when the .env file has a duplicate key (maybe due to a bug).
 	DuplicateKeys string = "REFLECTOR_DUPLICATE_KEYS"
