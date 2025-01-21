@@ -1,36 +1,51 @@
 package loader
 
 const (
-	// Occurs when the 'name' parameter is not specified in the provided Environment.
+	// The LOADER_MISSING_NAME error occurs when the Name field of the Environment
+	// struct is either missing or an empty string.
 	MissingName string = "LOADER_MISSING_NAME"
 
-	// Occurs when the 'name' parameter is not lowercase and underscores only.
+	// The LOADER_INVALID_NAME error occurs when the Name field of the Environment
+	// struct contains invalid characters, such as:
+	//
+	//	- Uppercase letters
+	//	- Numbers
+	//	- Special characters (other than underscores)
 	InvalidName string = "LOADER_INVALID_NAME"
 
-	// Occurs when the 'name' parameter is composed by only underscores.
+	// The LOADER_UNDERSCORE_ONLY_NAME error occurs when the Name field of the Environment
+	// struct is composed entirely of underscores.
 	UnderscoreOnlyName string = "LOADER_UNDERSCORE_ONLY_NAME"
 
-	// Occurs when the 'name' parameter contains a trailing underscore.
+	// The LOADER_TRAILING_UNDERSCORE error occurs when the Name field of the Environment
+	// struct contains a trailing underscore.
 	TrailingUnderscore string = "LOADER_TRAILING_UNDERSCORE"
 
-	// Occurs when the 'name' parameter contains a leading underscore.
+	// The LOADER_LEADING_UNDERSCORE error occurs when the Name field of the Environment
+	// struct contains a leading underscore.
 	LeadingUnderscore string = "LOADER_LEADING_UNDERSCORE"
 
-	// Occurs when the 'path' parameter specified in the Environment is not an existent dir.
+	// The LOADER_INEXISTENT_DIR error occurs when the OverridePath field in the Environment
+	// struct points to a directory that does not exist.
 	InexistentDir string = "LOADER_INEXISTENT_DIR"
 
-	// Occurs when the 'path' parameter specified in the Environment could not be read. E.g. Permission denied.
+	// The LOADER_FAILED_TO_READ_DIR error occurs when the application does not have permission
+	// to read the directory specified in the OverridePath field of the Environment struct.
 	FailedToReadDir string = "LOADER_FAILED_TO_READ_DIR"
 
-	// Occurs when a file could not be read due to an unexpected error. E.g. Permission denied.
+	// The LOADER_FAILED_TO_READ_ENV error occurs when the application does not have permission
+	// to read the target .env file.
 	FailedToReadEnv string = "LOADER_FAILED_TO_READ_ENV"
 
-	// Occurs when the 'path' parameter specified in the Environment does not point to a dir.
+	// The LOADER_PATH_IS_NOT_DIR error occurs when the OverridePath field defined in the Environment
+	// struct points to a file instead of a directory.
 	PathIsNotDir string = "LOADER_PATH_IS_NOT_DIR"
 
-	// Occurs when the 'path' parameter specified in the Environment does not point to a file.
+	// The LOADER_PATH_IS_NOT_FILE error is an internal error that occurs when the loader is not
+	// calculating the expected filename correctly.
 	PathIsNotFile string = "LOADER_PATH_IS_NOT_FILE"
 
-	// Occurs when the file loader could not find the target .env file.
+	// The LOADER_ENV_NOT_FOUND error occurs when the loader cannot find the target .env file in the
+	// expected directory.
 	EnvNotFound string = "LOADER_ENV_NOT_FOUND"
 )

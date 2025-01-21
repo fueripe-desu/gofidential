@@ -1,57 +1,88 @@
 package parser
 
 const (
-	// Occurs when the assignment operator is missing.
+	// The PARSER_MISSING_ASSIGNMENT error occurs when a key-value pair in the .env file is
+	// missing the assignment operator (=), which separates the key from its value.
 	MissingAssignment string = "PARSER_MISSING_ASSIGNMENT"
 
-	// Occurs when the key is missing in a key-value pair in a .env file.
+	// The PARSER_MISSING_KEY error occurs when a key-value pair in the .env file is missing
+	// a key—the identifier that appears before the assignment operator (=).
 	MissingKey string = "PARSER_MISSING_KEY"
 
-	// Occurs when the value is missing in a key-value pair in a .env file.
+	// The PARSER_MISSING_VALUE error occurs when a key-value pair in the .env file is missing
+	// the value—the part that is assigned to the key and follows the assignment operator (=).
 	MissingValue string = "PARSER_MISSING_VALUE"
 
-	// Occurs when the value inside the double quotes is empty..
+	// The PARSER_EMPTY_VALUE error occurs when a key-value pair in the .env file has an empty
+	// value enclosed in double quotes.
 	EmptyValue string = "PARSER_EMPTY_VALUE"
 
-	// Occurs when a value is quoted using single quotes in a .env file.
+	// The PARSER_SINGLE_QUOTED_VALUE error occurs when a key-value pair in the .env file has
+	// its value enclosed in single quotes, which is not allowed.
 	SingleQuotedValue string = "PARSER_SINGLE_QUOTED_VALUE"
 
-	// Occurs when a value is unquoted in a .env file.
+	// The PARSER_UNQUOTED_VALUE error occurs when a key-value pair in the .env file does not
+	// have the value enclosed in double quotes, which is not allowed.
 	UnquotedValue string = "PARSER_UNQUOTED_VALUE"
 
-	// Occurs when the quotes around a value are not terminated correctly in a .env file.
+	// The PARSER_UNTERMINATED_QUOTES error occurs when a key-value pair in the .env file starts
+	// with an opening double quote but is missing the closing double quote for the value.
 	UnterminatedQuotes string = "PARSER_UNTERMINATED_QUOTES"
 
-	// Occurs when the assignment operator (=), as in KEY=VALUE, has spaces around it.
+	// The PARSER_SPACED_SEPARATOR error occurs when a key-value pair in the .env file contains
+	// spaces around the assignment operator (=).
 	SpacedSeparator string = "PARSER_SPACED_SEPARATOR"
 
-	// Occurs when a .env file has a leading space before the key in one of its lines.
+	// The PARSER_LEADING_SPACE error occurs when a key-value pair in the .env file contains
+	// leading spaces before the key.
 	LeadingSpace string = "PARSER_LEADING_SPACE"
 
-	// Occurs when a .env file has an unallowed escape character.
+	// The PARSER_UNALLOWED_ESCAPE error occurs when a key-value pair in the .env file contains
+	// an escape sequence in the value that is not permitted. The parser strictly allows only the
+	// following escape characters:
+	//
+	//	- \n for a newline,
+	//	- \" for a double quote,
+	//	- \\ for a backslash.
+	//
+	// All other escape sequences are considered invalid.
 	UnallowedEscape string = "PARSER_UNALLOWED_ESCAPE"
 
-	// Occurs when a quote is escaped incorrectly resulting in traling text after the value.
+	// The PARSER_UNESCAPED_QUOTE_CHAR error occurs when a key-value pair in the .env file contains
+	// multiple unescaped double quotes within the value. This typically happens when the user forgets
+	// to escape the double quote character (\") that appears as part of the content.
 	UnescapedQuoteChar string = "PARSER_UNESCAPED_QUOTE"
 
-	// Occurs when a key contains lowercase characters in a .env file.
+	// The PARSER_LOWERCASE_KEY error occurs when a key in the .env file contains one or more lowercase
+	// characters. The parser enforces strict rules requiring all keys to be written entirely in uppercase.
 	LowercaseKey string = "PARSER_LOWERCASE_KEY"
 
-	// Occurs when a key contains number characters (0-9) in a .env file.
+	// The PARSER_NUMERIC_KEY_CHARS error occurs when a key in the .env file contains one or more numeric
+	// characters. The parser enforces strict rules requiring all keys to be written only using uppercase
+	// letters and underscores, without any numeric characters.
 	NumericKeyChars string = "PARSER_NUMERIC_KEY_CHARS"
 
-	// Occurs when a key starts with an underscore in a .env file.
+	// The PARSER_LEADING_UNDERSCORE error occurs when a key in the .env file starts with a leading underscore
+	// (_).
 	LeadingUnderscore string = "PARSER_KEY_STARTS_WITH_UNDERSCORE"
 
-	// Occurs when a key has a trailing underscore in a .env file.
+	// The PARSER_TRAILING_UNDERSCORE error occurs when a key in the .env file ends with a trailing underscore
+	// (_).
 	TrailingUnderscore string = "PARSER_TRAILING_UNDERSCORE"
 
-	// Occurs when a key contains invalid characters in a .env file.
+	// The PARSER_INVALID_KEY_CHARS error occurs when a key in the .env file contains characters other than
+	// uppercase letters and underscores. The parser strictly enforces these rules, rejecting keys with numbers,
+	// lowercase letters, or special characters.
 	InvalidKeyChars string = "PARSER_INVALID_KEY_CHARS"
 
-	// Occurs when a .env file has an inline comment (which is a comment in the same line as a key).
+	// The PARSER_INLINE_COMMENT error occurs when a key-value pair in the .env file includes an inline comment
+	// on the same line as the definition. The parser enforces a strict rule prohibiting inline comments.
 	InlineComment string = "PARSER_INLINE_COMMENT"
 
-	// Occurs when multiline values (which are not allowed) are used in a .env file.
+	// The PARSER_MULTILINE_VALUE error occurs when a key-value pair in the .env file includes a value that spans
+	// multiple lines. The parser strictly prohibits multiline values to maintain consistency and simplicity in
+	// the .env file format.
+	//
+	// If you need to represent a line break within a value, use the \n escape character instead.
 	MultilineValue string = "PARSER_MULTILINE_VALUE"
 )
