@@ -14,13 +14,13 @@ const (
 	EmptyValue string = "PARSER_EMPTY_VALUE"
 
 	// Occurs when a value is quoted using single quotes in a .env file.
-	SingleQuotedValue string = "PARSER_SINGLE_QUOTES"
+	SingleQuotedValue string = "PARSER_SINGLE_QUOTED_VALUE"
 
 	// Occurs when a value is unquoted in a .env file.
 	UnquotedValue string = "PARSER_UNQUOTED_VALUE"
 
 	// Occurs when the quotes around a value are not terminated correctly in a .env file.
-	UnterminatedQuotes string = "PARSER_UNTERMINATED_QUOTE"
+	UnterminatedQuotes string = "PARSER_UNTERMINATED_QUOTES"
 
 	// Occurs when the assignment operator (=), as in KEY=VALUE, has spaces around it.
 	SpacedSeparator string = "PARSER_SPACED_SEPARATOR"
