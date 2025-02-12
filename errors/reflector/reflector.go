@@ -76,4 +76,7 @@ const (
 	// The REFLECTOR_INVALID_TIME error occurs when the value from the .env file intended to populate a
 	// time.Time field in the struct is not a valid RFC3339Nano string literal.
 	InvalidTime string = "REFLECTOR_INVALID_TIME"
+
+	// The REFLECTOR_MISSING_ENV error occurs when the target variable is not available in the runtime environment.
+	MissingEnv string = "REFLECTOR_MISSING_ENV"
 )
