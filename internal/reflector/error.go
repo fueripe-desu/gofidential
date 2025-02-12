@@ -251,3 +251,16 @@ func newInvalidEnvDataError() *errors.GofidentialError {
 		Hint:    "This is an internal error. If you can’t find a solution it, please open an issue at https://github.com/fueripe-desu/gofidential.",
 	}
 }
+
+// The [reflector.newMissingEnvError] function creates an error with the
+// code "MissingEnv".
+//
+// Returns:
+//   - *errors.GofidentialError: The created error with the relevant details.
+func newMissingEnvError(env string) *errors.GofidentialError {
+	return &errors.GofidentialError{
+		Code:    errorCode.MissingEnv,
+		Message: fmt.Sprintf("The '%s' environment variable is missing.", env),
+		Hint:    "Ensure that a valid struct pointer is passed as the 's' parameter to the Load() function.",
+	}
+}

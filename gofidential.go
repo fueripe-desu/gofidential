@@ -99,6 +99,10 @@ import (
 //	log.Printf("BaseUrl: '%s'\n", s.BaseUrl)
 //	log.Printf("LogLevel: '%d'\n", s.LogLevel)
 func Load(s any, env Environment) error {
+	if env.LoadFromEnv {
+		return reflector.ReflectEnv(s)
+	}
+
 	byteData, err := loader.Load(env.Name, env.OverridePath, env.IgnoreFilename)
 
 	if err != nil {
