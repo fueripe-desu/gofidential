@@ -1,8 +1,8 @@
 package loader
 
 import (
-	"github.com/fueripe-desu/gofidential/errors"
-	errorCode "github.com/fueripe-desu/gofidential/errors/loader"
+	"github.com/fueripe-desu/gofidential/v2/errors"
+	errorCode "github.com/fueripe-desu/gofidential/v2/errors/loader"
 )
 
 // The [loader.newMissingNameError] function creates an error with the

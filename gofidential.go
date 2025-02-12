@@ -57,9 +57,9 @@
 package gofidential
 
 import (
-	loader "github.com/fueripe-desu/gofidential/internal/loader"
-	parser "github.com/fueripe-desu/gofidential/internal/parser"
-	reflector "github.com/fueripe-desu/gofidential/internal/reflector"
+	loader "github.com/fueripe-desu/gofidential/v2/internal/loader"
+	parser "github.com/fueripe-desu/gofidential/v2/internal/parser"
+	reflector "github.com/fueripe-desu/gofidential/v2/internal/reflector"
 )
 
 // The [gofidential.Load] function loads .env file data into a specified struct.

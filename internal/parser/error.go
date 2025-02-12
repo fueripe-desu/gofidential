@@ -3,8 +3,8 @@ package parser
 import (
 	"fmt"
 
-	"github.com/fueripe-desu/gofidential/errors"
-	errorCode "github.com/fueripe-desu/gofidential/errors/parser"
+	"github.com/fueripe-desu/gofidential/v2/errors"
+	errorCode "github.com/fueripe-desu/gofidential/v2/errors/parser"
 )
 
 // The [parser.newMissingAssignmentError] function creates an error with the

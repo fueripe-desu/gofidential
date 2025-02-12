@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	gf "github.com/fueripe-desu/gofidential"
+	gf "github.com/fueripe-desu/gofidential/v2"
 )
 
 type Secrets struct {

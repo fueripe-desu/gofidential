@@ -3,8 +3,8 @@ package reflector
 import (
 	"fmt"
 
-	"github.com/fueripe-desu/gofidential/errors"
-	errorCode "github.com/fueripe-desu/gofidential/errors/reflector"
+	"github.com/fueripe-desu/gofidential/v2/errors"
+	errorCode "github.com/fueripe-desu/gofidential/v2/errors/reflector"
 )
 
 // The [reflector.newSIsNilError] function creates an error with the
