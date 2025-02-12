@@ -7,6 +7,7 @@
 package reflector
 
 import (
+	"os"
 	"reflect"
 	"strconv"
 	"time"
@@ -254,4 +255,42 @@ func Reflect(data map[string]string, s any) error {
 	}
 
 	return nil
+}
+
+// The [reflector.ReflectEnv] function takes a struct pointer and populates it with values
+// from environment variables, using reflection to match the environment variable
+// names to the struct fields.
+//
+// Parameters:
+//   - s (any): The struct pointer that will be populated with values from the environment variables.
+//
+// Returns:
+//   - error: An error describing why the reflection process failed, or nil if the operation
+//     was successful. If an environment variable is missing, a specific error will be returned.
+func ReflectEnv(s any) error {
+	r, err := newReflector(s)
+
+	if err != nil {
+		return err
+	}
+
+	fields, err := r.AllFields()
+
+	if err != nil {
+		return err
+	}
+
+	data := map[string]string{}
+	for k := range fields {
+		newKey := pascalToUpper(k)
+		val := os.Getenv(newKey)
+
+		if val == "" {
+			return newMissingEnvError(newKey)
+		}
+
+		data[newKey] = val
+	}
+
+	return Reflect(data, s)
 }
