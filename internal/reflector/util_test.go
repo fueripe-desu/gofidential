@@ -72,3 +72,55 @@ func Test_upperToPascal(t *testing.T) {
 		})
 	}
 }
+
+func Test_pascalToUpper(t *testing.T) {
+	testcases := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{
+			name:     "basic conversion",
+			input:    "ThisIsSnakeCase",
+			expected: "THIS_IS_SNAKE_CASE",
+		},
+		{
+			name:     "single word",
+			input:    "Single",
+			expected: "SINGLE",
+		},
+		{
+			name:     "two words with a single underscore",
+			input:    "OneWord",
+			expected: "ONE_WORD",
+		},
+		{
+			name:     "empty",
+			input:    "",
+			expected: "",
+		},
+		{
+			name:     "letters and numbers",
+			input:    "Key123Example",
+			expected: "KEY_123_EXAMPLE",
+		},
+		{
+			name:     "single letter words",
+			input:    "ABC",
+			expected: "A_B_C",
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Arrange
+			assert := assert.New(t)
+
+			// Act
+			result := pascalToUpper(tc.input)
+
+			// Assert
+			assert.Equal(tc.expected, result)
+		})
+	}
+}

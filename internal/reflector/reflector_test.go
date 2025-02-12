@@ -1,6 +1,7 @@
 package reflector
 
 import (
+	"os"
 	"reflect"
 	"testing"
 	"time"
@@ -1417,6 +1418,83 @@ func Test_Reflect(t *testing.T) {
 			assert := assert.New(t)
 
 			err := Reflect(tc.data, tc.s)
+
+			if tc.expectedErr == nil {
+				require.NoError(err, "An unexpected error ocurred")
+				assert.Equal(tc.expectedS, tc.s)
+			} else {
+				require.Error(err, "An error was expected. But got none.")
+
+				castErr, ok := err.(*errors.GofidentialError)
+				require.True(ok, "Error is not of type GofidentialError.")
+
+				assert.Error(err, "An error was expected. But got none.")
+				assert.True(
+					castErr.Equal(tc.expectedErr),
+					"The actual error does not match the expected one. Actual: %v, Expected: %v",
+					castErr,
+					tc.expectedErr,
+				)
+			}
+		})
+	}
+}
+
+func Test_ReflectEnv(t *testing.T) {
+	testcases := []struct {
+		name        string
+		envs        map[string]string
+		s           any
+		expectedS   any
+		expectedErr *errors.GofidentialError
+	}{
+		{
+			name: "should return an error if env is missing",
+			envs: map[string]string{},
+			s: &(struct {
+				AppName string
+			}{}),
+			expectedErr: newMissingEnvError("APP_NAME"),
+		},
+		{
+			name: "should reflect correctly if env variables are available",
+			envs: map[string]string{
+				"APP_NAME":    "MyApp",
+				"VERSION_NUM": "1",
+				"DEBUG":       "true",
+				"ENVIRONMENT": "production",
+			},
+			s: &(struct {
+				AppName     string
+				VersionNum  int
+				Debug       bool
+				Environment string
+			}{}),
+			expectedS: &(struct {
+				AppName     string
+				VersionNum  int
+				Debug       bool
+				Environment string
+			}{
+				AppName:     "MyApp",
+				VersionNum:  1,
+				Debug:       true,
+				Environment: "production",
+			}),
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			require := require.New(t)
+			assert := assert.New(t)
+
+			for k, v := range tc.envs {
+				err := os.Setenv(k, v)
+				require.NoError(err, "Failed to set env variable")
+			}
+
+			err := ReflectEnv(tc.s)
 
 			if tc.expectedErr == nil {
 				require.NoError(err, "An unexpected error ocurred")

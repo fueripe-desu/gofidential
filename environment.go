@@ -15,6 +15,10 @@ type Environment struct {
 	// The name of the environment. This field is required.
 	Name string
 
+	// True if the variables should be loaded from the environment rather than a file. This
+	// field is optional.
+	LoadFromEnv bool
+
 	// An optional custom directory path to look for the .env file.
 	OverridePath string
 
