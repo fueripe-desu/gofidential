@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	gf "github.com/fueripe-desu/gofidential"
+	gf "github.com/fueripe-desu/gofidential/v2"
 )
 
 type Secrets struct {
@@ -64,4 +64,3 @@ func main() {
 	fmt.Printf("Bool field: '%v'\n", s.BoolField)
 	fmt.Printf("Time field: '%v'\n", s.TimeField.String())
 }
-

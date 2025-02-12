@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	errors "github.com/fueripe-desu/gofidential/errors"
+	errors "github.com/fueripe-desu/gofidential/v2/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
